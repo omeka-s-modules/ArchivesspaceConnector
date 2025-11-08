@@ -1,0 +1,90 @@
+<?php
+$this->htmlElement('body')->appendAttribute('class', 'archivesspace jobs undo');
+$escape = $this->plugin('escapeHtml');
+?>
+
+<?php echo $this->pageTitle($this->translate('ArchivesSpace Connector'), 1, $this->translate('Past Imports')); ?>
+
+<?php if(empty($imports)): ?>
+
+<?php else: ?>
+<?php echo $this->pagination(); ?>
+
+<form method='POST'>
+    <fieldset id='page-actions'>
+        <input type='submit' value='Submit' />
+    </fieldset>
+    <table class="tablesaw" data-tablesaw-mode="stack">
+        <thead>
+            <tr>
+                <th><?php echo $escape($this->translate('Undo'));?></th>
+                <th><?php echo $escape($this->translate('Re-run'));?></th>
+                <th><?php echo $this->sortLink($this->translate('Job ID'), 'id');?></th>
+                <th><?php echo $escape($this->translate('ArchivesSpace collection'));?></th>
+                <th><?php echo $escape($this->translate('Comment'));?></th>
+                <th><?php echo $escape($this->translate('Items'));?></th>
+                <th><?php echo $escape($this->translate('Date'));?></th>
+                <th><?php echo $escape($this->translate('Status'));?></th>
+                <th><?php echo $escape($this->translate('Owner'));?></th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($imports as $import): ?>
+        <?php $job = $import->job(); ?>
+        <?php $undoJob = $import->undoJob(); ?>
+        <?php $rerunJob = $import->rerunJob(); ?>
+        <tr>
+            <td><input type='checkbox' name='undoJobs[]' value='<?php echo $job->id(); ?>' />
+            <td><input type='checkbox' name='rerunJobs[]' value='<?php echo $job->id(); ?>' />
+            <td><?php echo $job->link($job->id()); ?></td>
+            <td>
+                <?php 
+                $args = $job->args();
+                if ($args['aspace_api_url'] && $args['aspace_target_path']) {
+                    $apiUrl = trim($args['aspace_api_url'], '/');
+                    $targetPath = trim($args['aspace_target_path'], '/');
+                    $aspaceLink = $apiUrl . '/oai?verb=GetRecord&identifier=oai:archivesspace:/'
+                    . $targetPath . '&metadataPrefix=oai_ead'; 
+                    echo $this->hyperlink('link', $aspaceLink, ['target' => '_blank']); 
+                }
+                ?>
+            </td>
+            <td>
+                <?php echo $import->comment(); ?>
+            </td>
+            <td>
+                <?php
+                $linkID = $job->id();
+                $totalCount = $import->addedCount() + $import->updatedCount();
+                // Only link to search results for Job IDs with associated items
+                $totalResults = $this->api()->search('items', ['archivesspace_import_id' => $linkID]);
+                if ($totalResults->getTotalResults() > 0) {
+                    echo $this->hyperlink('Total: ' . $totalResults->getTotalResults(), $this->url('admin/default', ['controller' => 'item', 'action' => 'browse'], ['query' => ['archivesspace_import_id' => $linkID]]), ['target' => '_blank']) . '<br>';
+                } else {
+                    echo 'Total: ' . $totalCount . '<br>';
+                }
+                echo 'Added: ' . $import->addedCount() . '<br>';
+                echo 'Updated: ' . $import->updatedCount();
+                ?>
+            </td>
+            <td><?php echo $escape($this->i18n()->dateFormat($job->started())); ?></td>
+            
+            <td>
+            <?php if ($rerunJob) {
+                $status = $this->translate('Reran in job ') . $rerunJob->id() . ': ' . $escape($this->i18n()->dateFormat($rerunJob->ended()));
+            } else if ($undoJob) {
+                $status = $this->translate('Undone in job ') . $undoJob->id() . ': ' . $escape($this->i18n()->dateFormat($undoJob->ended()));
+                
+            } else {
+                $status = $this->translate($job->status());
+            } 
+            ?>
+            <?php echo $status; ?>
+            </td>
+            <td><?php echo $this->hyperlink($job->owner()->name(), $this->url('admin/id', array('controller' => 'user', 'action' => 'show', 'id' => $job->owner()->id()))); ?></td>
+        </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+</form>
+<?php endif; ?>

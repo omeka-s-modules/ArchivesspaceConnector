@@ -1,0 +1,148 @@
+.repository {
+  border-bottom: 1px solid #dfdfdf;
+  margin-bottom: 12px;
+}
+
+.import-repository {
+  display: block;
+  margin-top: 6px;
+}
+
+.expand-collapse-all {
+    width: 100%;
+    text-align: right;
+}
+
+.name {
+    display: block;
+    font-weight: bold;
+}
+
+.communities {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.community {
+    width: calc(50% - .5rem);
+    margin-bottom: 1rem;
+    border-radius: 3px;
+    position: relative;
+}
+
+@media screen and (max-width:640px) {
+    .community {
+        width: 100%;
+        margin: 0 0 1rem !important;
+    }
+}
+
+.community:nth-child(2n+1) {
+    margin-left: 1rem;
+}
+
+.community > .name,
+.community > .description {
+    background: #676767;
+    padding: 6px;
+    color: #fff;
+    border: 1px solid #676767;
+    border-width: 0 1px;
+}
+
+.community > .name {
+    display: block;
+    padding: 6px 2em 6px 6px;
+    border-radius: 3px 3px 0 0;
+    border-top-width: 1px;
+}
+
+.community > .description {
+    padding: 0 6px 6px;
+}
+
+.community .expand,
+.community .collapse {
+    width: 2rem;
+    position: absolute;
+    top: 0;
+    right: 0;
+    text-align: center;
+    padding: 6px;
+}
+
+.community > .expand,
+.community > .collapse {
+    color: #fff;
+}
+
+.collection {
+    padding: 6px;
+    border: 1px solid #dfdfdf;
+    position: relative;
+    border-width: 0 1px 1px;
+}
+
+.collection:nth-of-type(2n) {
+    background: rgba(0,0,0,.04);
+}
+
+.collection > .name, 
+.collection > .description {
+    margin-bottom: 6px;
+}
+
+.collection > .name {
+    padding: 0 2rem 0 0;
+}
+
+.import-collection {
+    margin-bottom: 6px;
+}
+
+@keyframes fa-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loading {
+    overflow: hidden;
+    position: relative;
+}
+
+.loading * {
+    display: none;
+}
+
+.loading:before {
+    font-family: "Font Awesome 5 Free";
+    content: "\f1ce";
+    position: absolute;
+    top: .75em;
+    left: calc(50% - .6em);
+    font-size: 4em;
+    animation: fa-spin 1s infinite linear;
+    text-align: center;
+}
+
+.spinner-display.loading {
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background: white;
+    display: block;
+    font-weight: 900;
+}
+
+#import {
+    position: relative;
+}

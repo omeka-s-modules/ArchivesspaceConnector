@@ -1,0 +1,19 @@
+<?php
+$this->headScript()->appendFile($this->assetUrl('js/archivesspace-connector.js', 'DspaceConnector'));
+$this->headLink()->appendStylesheet($this->assetUrl('css/archivesspace-connector.css', 'DspaceConnector'));
+$form->prepare(); 
+$escapeHtml = $this->plugin('escapeHtml');
+$formElement = $this->plugin('formElement');
+$formLabel = $this->plugin('formLabel');
+?>
+
+<?php echo $this->pageTitle($this->translate('ArchivesSpace Connector'), 1, $this->translate('Import Settings')); ?>
+<div id="import" class="section active">
+    <?php echo $this->form()->openTag($form); ?>
+    <fieldset id='page-actions'>
+        <button id='index-submit'><?php echo $this->translate("Import"); ?></button>
+    </fieldset>
+    <?php echo $this->formCollection($form, false); ?>
+    <?php echo $this->form()->closeTag(); ?>
+    <div class='spinner-display'></div>
+</div>

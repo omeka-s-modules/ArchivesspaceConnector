@@ -1,0 +1,10 @@
+[main]
+host = https://www.transifex.com
+
+[o:omeka:p:omeka-s:r:module-FedoraConnector]
+file_filter  = language/<lang>.po
+source_file  = language/template.pot
+source_lang  = en
+type         = PO
+minimum_perc = 10
+
