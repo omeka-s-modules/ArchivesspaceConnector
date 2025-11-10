@@ -80,22 +80,21 @@ class Import extends AbstractJob
             $this->logger->err("HierarchyUpdater service not found (is the Hierarchy module enabled?), skipping job.");
         } else {
             $this->importCollection($this->mainUri);
-        }
-
-        if ($this->rerun && $this->getArg('delete_missing_items')) {
-            // If delete_missing_items checked, delete any items
-            // remaining from previous job (i.e. without updated job id)
-            $remainingItems = $this->api->search('archivesspace_items', [
-                'job_id' => (int) $this->getArg('previous_job'),
-            ]);
-            foreach ($remainingItems->getContent() as $item) {
-                $this->api->delete('archivesspace_items', $item->id());
-                $this->api->delete('items', $item->item()->id());
-                $deletedCount++;
-            }
-            if ($deletedCount) {
-                $deletedComment = $deletedCount . ' items deleted';
-                $comment = strlen($comment) ? $comment . '; ' . $deletedComment : $deletedComment;
+            if ($this->rerun && $this->getArg('delete_missing_items')) {
+                // If delete_missing_items checked, delete any items
+                // remaining from previous job (i.e. without updated job id)
+                $remainingItems = $this->api->search('archivesspace_items', [
+                    'job_id' => (int) $this->getArg('previous_job'),
+                ]);
+                foreach ($remainingItems->getContent() as $item) {
+                    $this->api->delete('archivesspace_items', $item->id());
+                    $this->api->delete('items', $item->item()->id());
+                    $deletedCount++;
+                }
+                if ($deletedCount) {
+                    $deletedComment = $deletedCount . ' items deleted';
+                    $comment = strlen($comment) ? $comment . '; ' . $deletedComment : $deletedComment;
+                }
             }
         }
 

@@ -86,7 +86,7 @@ class ImportForm extends Form
             'attributes' => [
                 'id' => 'maintain-hierarchy',
                 'disabled' => $disableHierarchy,
-                'value' => true,
+                'value' => $disableHierarchy ? false : true,
             ],
         ]);
         
