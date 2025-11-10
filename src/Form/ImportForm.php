@@ -60,7 +60,7 @@ class ImportForm extends Form
             'type' => 'text',
             'options' => [
                 'label' => 'ArchivesSpace target path', // @translate
-                'info' => 'The path to the repository, resource, or archival object you wish to import. Example: /repositories/2/resources/138', // @translate
+                'info' => 'The path to the ArchivesSpace collection you wish to import. Example: /repositories/2/resources/138', // @translate
             ],
             'attributes' => [
                 'id' => 'aspace_target_path',
