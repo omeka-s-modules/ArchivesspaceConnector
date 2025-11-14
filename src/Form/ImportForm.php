@@ -172,6 +172,10 @@ class ImportForm extends Form
 
         $inputFilter = $this->getInputFilter();
         $inputFilter->add([
+            'name' => 'maintain_hierarchy',
+            'required' => false,
+        ]);
+        $inputFilter->add([
             'name' => 'resource_template',
             'required' => false,
         ]);
