@@ -430,6 +430,17 @@ class Import extends AbstractJob
                     $itemSetId = $itemSet->id();
                 }
                 
+                // Keep existing siteItemSets, add new siteItemSet
+                foreach ($this->itemSiteArray as $site) {
+                    $siteItemSetsUpdate = [];
+                    $siteEntity = $this->api->search('sites', ['id' => (int) $site])->getContent()[0];
+                    foreach ($siteEntity->siteItemSets() as $siteItemSet) {
+                        $siteItemSetsUpdate['o:site_item_set'][]['o:item_set']['o:id'] = $siteItemSet->itemSet()->id();
+                    }
+                    $siteItemSetsUpdate['o:site_item_set'][]['o:item_set']['o:id'] = $itemSetId;
+                    $this->api->update('sites', $siteEntity->id(), $siteItemSetsUpdate, [], ['isPartial' => true]);
+                }
+
                 // Get date last modified
                 $xml->registerXPathNamespace('ns', $this->baseNs);
                 $datestamp = $xml->xpath("//ns:header/ns:datestamp");

@@ -165,7 +165,7 @@ class ImportForm extends Form
             ],
             'options' => [
                 'label' => 'Sites', // @translate
-                'info' => 'Optional. Import items into site(s).', // @translate
+                'info' => 'Optional. Import new items and item sets into site(s).', // @translate
                 'empty_option' => '',
             ],
         ]);
