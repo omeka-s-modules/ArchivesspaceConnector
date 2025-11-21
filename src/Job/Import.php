@@ -23,6 +23,8 @@ class Import extends AbstractJob
 
     protected $updatedCount;
     
+    protected $resourceTemplateId;
+
     protected $hierarchyId;
 
     protected $deletedCount;
@@ -62,7 +64,7 @@ class Import extends AbstractJob
         $this->client = $this->getServiceLocator()->get('Omeka\HttpClient');
         $this->itemSiteArray = $this->getArg('itemSites', false);
         $this->previousItemsetArray = $this->getArg('previous_itemset_array', false) ?: [];
-        $this->resourceTemplate = $this->getArg('resource_template', false);
+        $this->resourceTemplateId = (int) $this->getArg('resource_template', 0);
         
         if ($this->getArg('aspace_api_url') && $this->getArg('aspace_target_path')) {
             $this->apiUrl = trim($this->getArg('aspace_api_url'), '/');
@@ -268,8 +270,9 @@ class Import extends AbstractJob
                     $json['o:item_set'] = $existingItemSets;
                 }
 
-                if ($this->resourceTemplate) {
-                    $json['o:resource_template']['o:id'] = (int) $this->resourceTemplate;
+                if ($this->resourceTemplateId) {
+                    $json['o:resource_template']['o:id'] = (int) $this->resourceTemplateId;
+                    $writer = new \Laminas\Log\Writer\Stream('logs/application.log');
                 }
                 
                 try {
@@ -287,8 +290,8 @@ class Import extends AbstractJob
                     $json['o:item_set'] = [ $itemSet->id() ];
                 }
 
-                if ($this->resourceTemplate) {
-                    $json['o:resource_template'] = (int) $this->resourceTemplate;
+                if ($this->resourceTemplateId) {
+                    $json['o:resource_template']['o:id'] = (int) $this->resourceTemplateId;
                 }
 
                 try {

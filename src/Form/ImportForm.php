@@ -3,7 +3,7 @@ namespace ArchivesspaceConnector\Form;
 
 use Omeka\Form\Element\ItemSetSelect;
 use Omeka\Form\Element\SiteSelect;
-use Omeka\Form\Element\ResourceSelect;
+use Laminas\Form\Element\Select;
 use Omeka\Settings\UserSettings;
 use Omeka\Api\Manager as ApiManager;
 use Omeka\Module\Manager as ModuleManager;
@@ -115,31 +115,28 @@ class ImportForm extends Form
             ],
         ]);
 
+        // Get resource templates
+        $results = $this->getApiManager()->search('resource_templates', ['limit' => 100])->getContent();
+        $valueOptions = [];
+        foreach ($results as $rt) {
+            $valueOptions[$rt->id()] = $rt->label();
+        }
+
         $this->add([
             'name' => 'resource_template',
-            'type' => ResourceSelect::class,
+            'type' => Select::class,
             'attributes' => [
                 'id' => 'resource-template-select',
                 'class' => 'chosen-select',
-                'data-placeholder' => 'Select a template', // @translate
-                'data-api-base-url' => $urlHelper('api-local/default', ['resource' => 'resource_templates']),
             ],
             'options' => [
                 'label' => 'Resource template', // @translate
                 'info' => 'Assign a resource template to all imported resources.', // @translate
                 'empty_option' => 'Select a template',
-                'resource_value_options' => [
-                    'resource' => 'resource_templates',
-                    'query' => [
-                        'sort_by' => 'label',
-                    ],
-                    'option_text_callback' => function ($resourceTemplate) {
-                        return $resourceTemplate->label();
-                    },
-                ],
+                'value_options' => $valueOptions,
             ],
         ]);
-        
+
         // Merge assign_new_item sites and default user sites
         $defaultAddSiteRepresentations = $this->getApiManager()->search('sites', ['assign_new_items' => true])->getContent();
         foreach ($defaultAddSiteRepresentations as $defaultAddSiteRepresentation) {
