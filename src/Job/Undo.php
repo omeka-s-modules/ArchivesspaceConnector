@@ -11,6 +11,7 @@ class Undo extends AbstractJob
     {
         $jobId = $this->getArg('previous_job');
         $hierarchyId = $this->getArg('hierarchy_id') ?: 0;
+        $comment = $this->getArg('comment');
         $api = $this->getServiceLocator()->get('Omeka\ApiManager');
 
         // Delete items
@@ -42,17 +43,20 @@ class Undo extends AbstractJob
         ];
         $hierarchyUpdater->updateHierarchy($hierarchyData);
 
-        $deleteComment = $deletedCount ? $deletedCount . ' items deleted' : '';
+        if ($deletedCount) {
+            $deletedComment = $deletedCount . ' items deleted';
+            $comment = strlen($comment) ? $comment . '; ' . $deletedComment : $deletedComment;
+        }
         $archivesspaceImportJson = [
                             'o:job' => ['o:id' => $this->job->getId()],
-                            'comment' => $deleteComment,
+                            'comment' => $comment,
                             'added_count' => 0,
                             'updated_count' => 0,
                             'hierarchy_id' => 0,
                           ];
         $response = $api->create('archivesspace_imports', $archivesspaceImportJson);
         $jobArgs = $this->job->getArgs();
-        $jobArgs['comment'] = $deleteComment;
+        $jobArgs['comment'] = $comment;
         $jobArgs['hierarchy_id'] = 0;
         $this->job->setArgs($jobArgs);
     }

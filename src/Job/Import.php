@@ -272,7 +272,6 @@ class Import extends AbstractJob
 
                 if ($this->resourceTemplateId) {
                     $json['o:resource_template']['o:id'] = (int) $this->resourceTemplateId;
-                    $writer = new \Laminas\Log\Writer\Stream('logs/application.log');
                 }
                 
                 try {
