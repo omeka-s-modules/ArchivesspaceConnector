@@ -46,27 +46,30 @@ class IndexController extends AbstractActionController
     {
         if ($this->getRequest()->isPost()) {
             $data = $this->params()->fromPost();
-            if (isset($data['undoJobs'])) {
+            if (isset($data['jobActions'])) {
                 $undoJobIds = [];
-                foreach ($data['undoJobs'] as $jobId) {
-                    $this->undoJob($jobId);
-                    $undoJobIds[] = $jobId;
-                }
-                $message = new Message('Undo in progress on the following jobs: %s', // @translate
-                    implode(', ', $undoJobIds));
-                $this->messenger()->addSuccess($message);
-            }
-            if (isset($data['rerunJobs'])) {
                 $rerunJobIds = [];
-                foreach ($data['rerunJobs'] as $jobId) {
-                    $this->rerunJob($jobId);
-                    $rerunJobIds[] = $jobId;
+                foreach ($data['jobActions'] as $jobId => $action) {
+                    if ($action == 'undo') {
+                        $this->undoJob($jobId);
+                        $undoJobIds[] = $jobId;
+                    }
+                    if ($action == 'rerun') {
+                        $this->rerunJob($jobId);
+                        $rerunJobIds[] = $jobId;
+                    }
                 }
-                $message = new Message('Rerun in progress on the following jobs: %s', // @translate
-                    implode(', ', $rerunJobIds));
-                $this->messenger()->addSuccess($message);
-            }
-            if (!isset($data['undoJobs']) && !isset($data['rerunJobs'])) {
+                if (!empty($undoJobIds)) {
+                    $message = new Message('Undo in progress on the following jobs: %s', // @translate
+                        implode(', ', $undoJobIds));
+                    $this->messenger()->addSuccess($message);
+                }
+                if (!empty($rerunJobIds)) {
+                    $message = new Message('Rerun in progress on the following jobs: %s', // @translate
+                        implode(', ', $rerunJobIds));
+                    $this->messenger()->addSuccess($message);
+                }
+            } else {
                 $this->messenger()->addError('Error: no jobs selected'); // @translate
             }
             return $this->redirect()->toRoute('admin/archivesspace-connector/past-imports');

@@ -34,8 +34,8 @@ $escape = $this->plugin('escapeHtml');
         <?php $undoJob = $import->undoJob(); ?>
         <?php $rerunJob = $import->rerunJob(); ?>
         <tr>
-            <td><input type='checkbox' name='undoJobs[]' value='<?php echo $job->id(); ?>' />
-            <td><input type='checkbox' name='rerunJobs[]' value='<?php echo $job->id(); ?>' />
+            <td><input type='radio' name='jobActions[<?php echo $job->id(); ?>]' value='undo' />
+            <td><input type='radio' name='jobActions[<?php echo $job->id(); ?>]' value='rerun' />
             <td><?php echo $job->link($job->id()); ?></td>
             <td>
                 <?php 
