@@ -41,12 +41,13 @@ $escape = $this->plugin('escapeHtml');
             <td>
                 <?php 
                 $args = $job->args();
+                $linkText = isset($args['collection_name']) ? $args['collection_name'] : 'link';
                 if ($args['aspace_api_url'] && $args['aspace_target_path']) {
                     $apiUrl = trim($args['aspace_api_url'], '/');
                     $targetPath = trim($args['aspace_target_path'], '/');
                     $aspaceLink = $apiUrl . '/oai?verb=GetRecord&identifier=oai:archivesspace:/'
-                    . $targetPath . '&metadataPrefix=oai_ead'; 
-                    echo $this->hyperlink('link', $aspaceLink, ['target' => '_blank']); 
+                    . $targetPath . '&metadataPrefix=oai_ead';
+                    echo $this->hyperlink($linkText, $aspaceLink, ['target' => '_blank']);
                 }
                 ?>
             </td>

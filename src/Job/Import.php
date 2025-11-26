@@ -147,9 +147,17 @@ class Import extends AbstractJob
                 }
             }
 
-            // Get top level resource XML object & URI
+            // Get top level resource XML object, URI & collection title
             $xml->registerXPathNamespace('ead_ns', $this->eadNs);
             $targetXML = $xml->xpath("//ead_ns:ead/ead_ns:archdesc");
+            $collTitle = $xml->xpath("//ead_ns:ead/ead_ns:archdesc/ead_ns:did/ead_ns:unittitle");
+
+            // Set collection name as job arg to link on past imports screen
+            if (!empty($collTitle)) {
+                $jobArgs = $this->job->getArgs();
+                $jobArgs['collection_name'] = (string) $collTitle[0];
+                $this->job->setArgs($jobArgs);
+            }
 
             // Iterate through $targetXML saving nested resource URIs in array
             if (!empty($targetXML)) {
