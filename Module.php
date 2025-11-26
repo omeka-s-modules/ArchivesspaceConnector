@@ -83,28 +83,30 @@ class Module extends AbstractModule
         $api = $this->getServiceLocator()->get('Omeka\ApiManager');
         $view = $event->getTarget();
         $resource = $view->resource;
-        // $resource = $event->getParam('resource');
         switch (get_class($resource)) {
             case 'Omeka\Api\Representation\ItemRepresentation':
                 $response = $api->search('archivesspace_items', ['item_id' => $resource->id()]);
                 $archivesspaceResources = $response->getContent();
+                $archivesspaceResource = $archivesspaceResources[0];
+                $resourceTitle = $archivesspaceResource->item()->title() ?: $view->translate('link');
                 break;
             case 'Omeka\Api\Representation\ItemSetRepresentation':
                 $response = $api->search('archivesspace_item_sets', ['item_set_id' => $resource->id()]);
                 $archivesspaceResources = $response->getContent();
+                $archivesspaceResource = $archivesspaceResources[0];
+                $resourceTitle = $archivesspaceResource->itemSet()->title() ?: $view->translate('link');
                 break;
             default:
                 return;
         }
         
-        if ($archivesspaceResources) {
-            $archivesspaceResource = $archivesspaceResources[0];
+        if ($archivesspaceResource) {
             $targetPath = trim($archivesspaceResource->targetPath(), '/');
             $parsedUrl = parse_url($archivesspaceResource->apiUrl());
             $resourceLink = sprintf('%s://%s/%s', $parsedUrl['scheme'], $parsedUrl['host'], $targetPath);
             echo '<h3>' . $view->translate('Original') . '</h3>';
+            echo '<p><a href="' . $resourceLink . '" target="_blank">' . $resourceTitle . '</a></p>';
             echo '<p>' . $view->translate('Last Modified') . ' ' . $view->i18n()->dateFormat($archivesspaceResource->lastModified()) . '</p>';
-            echo '<p><a href="' . $resourceLink . '" target="_blank">' . $view->translate('Link') . '</a></p>';
         }
     }
 
