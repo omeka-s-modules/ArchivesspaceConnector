@@ -32,11 +32,11 @@ $escape = $this->plugin('escapeHtml');
         <?php foreach ($imports as $import): ?>
         <?php $job = $import->job(); ?>
         <?php $undoJob = $import->undoJob(); ?>
-        <?php $disableUndo = ($job->jobClass() == 'ArchivesspaceConnector\Job\Undo') ? 'disabled' : ''; ?>
+        <?php $disableOption = ($job->jobClass() == 'ArchivesspaceConnector\Job\Undo') ? 'disabled' : ''; ?>
         <?php $rerunJob = $import->rerunJob(); ?>
         <tr>
-            <td><input type='radio' name='jobActions[<?php echo $job->id(); ?>]' value='undo' <?php echo $disableUndo; ?> />
-            <td><input type='radio' name='jobActions[<?php echo $job->id(); ?>]' value='rerun' />
+            <td><input type='radio' name='jobActions[<?php echo $job->id(); ?>]' value='undo' <?php echo $disableOption; ?> />
+            <td><input type='radio' name='jobActions[<?php echo $job->id(); ?>]' value='rerun' <?php echo $disableOption; ?> />
             <td><?php echo $job->link($job->id()); ?></td>
             <td>
                 <?php 
