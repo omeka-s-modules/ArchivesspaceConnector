@@ -35,8 +35,8 @@ $escape = $this->plugin('escapeHtml');
         <?php $disableOption = ($job->jobClass() == 'ArchivesspaceConnector\Job\Undo') ? 'disabled' : ''; ?>
         <?php $rerunJob = $import->rerunJob(); ?>
         <tr>
-            <td><input type='radio' name='jobActions[<?php echo $job->id(); ?>]' value='undo' <?php echo $disableOption; ?> />
-            <td><input type='radio' name='jobActions[<?php echo $job->id(); ?>]' value='rerun' <?php echo $disableOption; ?> />
+            <td><input type='radio' name='jobActions[<?php echo $job->id(); ?>]' value='undo' aria-label="<?php echo $this->translate('Undo'); ?>" <?php echo $disableOption; ?> />
+            <td><input type='radio' name='jobActions[<?php echo $job->id(); ?>]' value='rerun' aria-label="<?php echo $this->translate('Rerun'); ?>" <?php echo $disableOption; ?> />
             <td><?php echo $job->link($job->id()); ?></td>
             <td>
                 <?php 
