@@ -75,11 +75,11 @@ class Import extends AbstractJob
             $this->mainUri = '';
         }
         
-        // If maintain_hierarchy checked and hierarchy module not found, skip
+        // If maintain_hierarchy checked and hierarchy module not found or not latest version, skip
         $container = $this->getServiceLocator();
         if ($this->getArg('maintain_hierarchy') && !$container->has(\Hierarchy\Service\HierarchyUpdater\HierarchyUpdater::class)
         ) {
-            $this->logger->err("HierarchyUpdater service not found (is the Hierarchy module enabled?), skipping job.");
+            $this->logger->err("HierarchyUpdater service not found (is the latest version of Hierarchy module installed?), skipping job.");
         } else {
             $this->importCollection($this->mainUri);
             if ($this->rerun && $this->getArg('delete_missing_items')) {
