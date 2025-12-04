@@ -17,9 +17,8 @@ $escape = $this->plugin('escapeHtml');
     <table class="tablesaw" data-tablesaw-mode="stack">
         <thead>
             <tr>
-                <th><?php echo $escape($this->translate('Undo'));?></th>
-                <th><?php echo $escape($this->translate('Re-run'));?></th>
                 <th><?php echo $this->sortLink($this->translate('Job ID'), 'id');?></th>
+                <th><?php echo $escape($this->translate('Actions'));?></th>
                 <th><?php echo $escape($this->translate('ArchivesSpace collection'));?></th>
                 <th><?php echo $escape($this->translate('Comment'));?></th>
                 <th><?php echo $escape($this->translate('Items'));?></th>
@@ -35,9 +34,23 @@ $escape = $this->plugin('escapeHtml');
         <?php $disableOption = ($job->jobClass() == 'ArchivesspaceConnector\Job\Undo') ? 'disabled' : ''; ?>
         <?php $rerunJob = $import->rerunJob(); ?>
         <tr>
-            <td><input type='radio' name='jobActions[<?php echo $job->id(); ?>]' value='undo' aria-label="<?php echo $this->translate('Undo'); ?>" <?php echo $disableOption; ?> />
-            <td><input type='radio' name='jobActions[<?php echo $job->id(); ?>]' value='rerun' aria-label="<?php echo $this->translate('Rerun'); ?>" <?php echo $disableOption; ?> />
             <td><?php echo $job->link($job->id()); ?></td>
+            <td>
+            <div class="inputs" style="display: flex; flex-direction: column;">
+                <label>
+                    <input type='radio' name='jobActions[<?php echo $job->id(); ?>]' value checked aria-label="<?php echo $this->translate('[No Action]'); ?>" />
+                    <?php echo $this->translate('[No Action]'); ?>
+                </label>
+                <label>
+                    <input type='radio' name='jobActions[<?php echo $job->id(); ?>]' value='undo' aria-label="<?php echo $this->translate('Undo'); ?>" <?php echo $disableOption; ?> />
+                    <?php echo $this->translate('Undo'); ?>
+                </label>
+                <label>
+                    <input type='radio' name='jobActions[<?php echo $job->id(); ?>]' value='rerun' aria-label="<?php echo $this->translate('Re-run'); ?>" <?php echo $disableOption; ?> />
+                    <?php echo $this->translate('Re-run'); ?>
+                </label>
+            </div>
+            </td>
             <td>
                 <?php 
                 $args = $job->args();
