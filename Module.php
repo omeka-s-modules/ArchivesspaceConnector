@@ -87,20 +87,24 @@ class Module extends AbstractModule
             case 'Omeka\Api\Representation\ItemRepresentation':
                 $response = $api->search('archivesspace_items', ['item_id' => $resource->id()]);
                 $archivesspaceResources = $response->getContent();
-                $archivesspaceResource = $archivesspaceResources[0];
-                $resourceTitle = $archivesspaceResource->item()->title() ?: $view->translate('link');
+                if (!empty($archivesspaceResource)) {
+                    $archivesspaceResource = $archivesspaceResources[0];
+                    $resourceTitle = $archivesspaceResource->item()->title() ?: $view->translate('link');
+                }
                 break;
             case 'Omeka\Api\Representation\ItemSetRepresentation':
                 $response = $api->search('archivesspace_item_sets', ['item_set_id' => $resource->id()]);
                 $archivesspaceResources = $response->getContent();
-                $archivesspaceResource = $archivesspaceResources[0];
-                $resourceTitle = $archivesspaceResource->itemSet()->title() ?: $view->translate('link');
+                if (!empty($archivesspaceResource)) {
+                    $archivesspaceResource = $archivesspaceResources[0];
+                    $resourceTitle = $archivesspaceResource->itemSet()->title() ?: $view->translate('link');
+                }
                 break;
             default:
                 return;
         }
         
-        if ($archivesspaceResource) {
+        if (!empty($archivesspaceResource)) {
             $targetPath = trim($archivesspaceResource->targetPath(), '/');
             $parsedUrl = parse_url($archivesspaceResource->apiUrl());
             $resourceLink = sprintf('%s://%s/%s', $parsedUrl['scheme'], $parsedUrl['host'], $targetPath);
