@@ -37,7 +37,7 @@ $escape = $this->plugin('escapeHtml');
         <tr>
             <th scope="row"><?php echo $job->link($job->id()); ?></th>
             <td>
-            <div class="archivesspace-connector-inputs" role="radiogroup" aria-label="<?php echo $this->translate('Options'); ?>">
+            <div class="archivesspace-connector-inputs" role="radiogroup" aria-label="<?php echo $this->translate('Action options'); ?>">
                 <label>
                     <input type='radio' name='jobActions[<?php echo $job->id(); ?>]' value checked aria-label="<?php echo $this->translate('[No Action]'); ?>" />
                     <?php echo $this->translate('[No Action]'); ?>
