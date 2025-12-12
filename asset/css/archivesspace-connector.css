@@ -1,0 +1,30 @@
+.archivesspace .sortable:before,
+.archivesspace .sorted-asc:before,
+.archivesspace .sorted-desc:before {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+}
+
+.archivesspace .sorted-asc:before {
+    content: "\f0d8";
+}
+
+.archivesspace .sortable:before,
+.archivesspace .sorted-desc:before {
+    content: "\f0d7";
+}
+
+.archivesspace-connector-inputs { 
+    display: flex; 
+    flex-direction: column;
+}
+
+.archivesspace tbody th {
+    border-bottom: 1px solid #dfdfdf;
+}
+
+.archivesspace td.archivesspace-comment {
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis;
+}
