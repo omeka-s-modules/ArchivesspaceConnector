@@ -1,6 +1,6 @@
 <?php
 $this->headLink()->appendStylesheet($this->assetUrl('css/archivesspace-connector.css', 'ArchivesspaceConnector'));
-$this->htmlElement('body')->appendAttribute('class', 'archivesspace jobs undo');
+$this->htmlElement('body')->appendAttribute('class', 'archivesspace jobs undo browse');
 $escape = $this->plugin('escapeHtml');
 ?>
 
@@ -9,16 +9,20 @@ $escape = $this->plugin('escapeHtml');
 <?php if(empty($imports)): ?>
 
 <?php else: ?>
-<?php echo $this->pagination(); ?>
 
+<div class="browse-controls">
+    <?php echo $this->pagination(); ?>
+    <?php echo $this->browse()->renderSortSelector('ac_past_imports'); ?>
+</div>
 <form method='POST'>
     <fieldset id='page-actions'>
         <input type='submit' value='Submit' />
     </fieldset>
+
     <table class="tablesaw" data-tablesaw-mode="stack" aria-label="<?php echo $this->translate('Past Imports'); ?>">
         <thead>
             <tr>
-                <th scope="col"><?php echo $this->translate('Job ID'); ?> <?php echo $this->sortLink($this->translate('Job ID'), 'id', 'archivesspace-connector/index/sort-link.phtml');?></th>
+                <th scope="col"><?php echo $this->translate('Job ID'); ?></th>
                 <th scope="col"><?php echo $escape($this->translate('Actions'));?></th>
                 <th scope="col"><?php echo $escape($this->translate('ArchivesSpace collection'));?></th>
                 <th scope="col"><?php echo $escape($this->translate('Comment'));?></th>

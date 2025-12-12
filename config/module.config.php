@@ -93,4 +93,12 @@ return [
             ],
         ],
     ],
+    'sort_defaults' => [
+        'admin' => [
+            'ac_past_imports' => [
+                'job_id' => 'Job ID', // @translate
+                'date' => 'Date', // @translate
+            ],
+        ],
+    ],
 ];
