@@ -93,6 +93,14 @@ return [
             ],
         ],
     ],
+    'browse_defaults' => [
+        'admin' => [
+            'ac_past_imports' => [
+                'sort_by' => 'job_id',
+                'sort_order' => 'desc',
+            ],
+        ],
+    ],
     'sort_defaults' => [
         'admin' => [
             'ac_past_imports' => [

@@ -83,6 +83,7 @@ class IndexController extends AbstractActionController
         ];
         $response = $this->api()->search('archivesspace_imports', $query);
         $this->paginator($response->getTotalResults(), $page);
+        $this->browse()->setDefaults('ac_past_imports');
         $view->setVariable('imports', $response->getContent());
         return $view;
     }
