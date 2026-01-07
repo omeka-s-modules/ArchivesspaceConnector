@@ -12,3 +12,13 @@
     overflow: hidden; 
     text-overflow: ellipsis;
 }
+
+.archivesspace .tablesaw td:first-of-type {
+    background: transparent !important;
+}
+
+@media screen and (max-width: 640px) {
+    .archivesspace .tablesaw tbody th {
+        background-color: rgba(0,0,0,.04);
+    }
+}
