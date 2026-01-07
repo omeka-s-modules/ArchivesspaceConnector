@@ -7,10 +7,12 @@
     border-bottom: 1px solid #dfdfdf;
 }
 
-.archivesspace td.archivesspace-comment {
-    white-space: nowrap; 
-    overflow: hidden; 
-    text-overflow: ellipsis;
+.archivesspace td.archivesspace-comment .tablesaw-cell-content {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+    overflow: hidden;
 }
 
 .archivesspace .tablesaw td:first-of-type {
