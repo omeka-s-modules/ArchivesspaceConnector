@@ -18,7 +18,27 @@
 }
 
 @media screen and (max-width: 640px) {
+    .archivesspace .tablesaw {
+        border: 0;
+    }
+
+    .archivesspace .tablesaw tbody th,
+    .archivesspace .tablesaw tbody td {
+        display: flex;
+    }
+
+    .archivesspace .tablesaw tbody tr {
+        border: 1px solid #dfdfdf;
+        border-radius: 3px;
+        margin-bottom: 1rem;
+    }
+
     .archivesspace .tablesaw tbody th {
         background-color: rgba(0,0,0,.04);
+        border-top: 0;
+    }
+
+    .archivesspace .tablesaw tbody tr td:last-child {
+        border-bottom: 0;
     }
 }
