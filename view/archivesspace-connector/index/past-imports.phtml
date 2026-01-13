@@ -72,7 +72,7 @@ $escape = $this->plugin('escapeHtml');
             <td class="archivesspace-comment">
                 <?php echo $import->comment(); ?>
             </td>
-            <td>
+            <td class="archivesspace-items">
                 <?php
                 $linkID = $job->id();
                 $totalCount = $import->addedCount() + $import->updatedCount();

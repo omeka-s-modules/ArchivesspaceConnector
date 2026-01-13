@@ -15,6 +15,10 @@
     overflow: hidden;
 }
 
+.archivesspace td.archivesspace-items .tablesaw-cell-content {
+    display: inline;
+}
+
 .archivesspace .tablesaw td:first-of-type {
     background: transparent !important;
 }
