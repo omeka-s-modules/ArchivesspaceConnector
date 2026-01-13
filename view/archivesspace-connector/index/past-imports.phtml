@@ -1,5 +1,6 @@
 <?php
-$this->htmlElement('body')->appendAttribute('class', 'archivesspace jobs undo');
+$this->headLink()->appendStylesheet($this->assetUrl('css/archivesspace-connector.css', 'ArchivesspaceConnector'));
+$this->htmlElement('body')->appendAttribute('class', 'archivesspace jobs undo browse');
 $escape = $this->plugin('escapeHtml');
 ?>
 
@@ -8,23 +9,27 @@ $escape = $this->plugin('escapeHtml');
 <?php if(empty($imports)): ?>
 
 <?php else: ?>
-<?php echo $this->pagination(); ?>
 
+<div class="browse-controls">
+    <?php echo $this->pagination(); ?>
+    <?php echo $this->browse()->renderSortSelector('ac_past_imports'); ?>
+</div>
 <form method='POST'>
     <fieldset id='page-actions'>
         <input type='submit' value='Submit' />
     </fieldset>
-    <table class="tablesaw" data-tablesaw-mode="stack">
+
+    <table class="tablesaw" data-tablesaw-mode="stack" aria-label="<?php echo $this->translate('Past Imports'); ?>">
         <thead>
             <tr>
-                <th><?php echo $this->sortLink($this->translate('Job ID'), 'id');?></th>
-                <th><?php echo $escape($this->translate('Actions'));?></th>
-                <th><?php echo $escape($this->translate('ArchivesSpace collection'));?></th>
-                <th><?php echo $escape($this->translate('Comment'));?></th>
-                <th><?php echo $escape($this->translate('Items'));?></th>
-                <th><?php echo $escape($this->translate('Date'));?></th>
-                <th><?php echo $escape($this->translate('Status'));?></th>
-                <th><?php echo $escape($this->translate('Owner'));?></th>
+                <th scope="col"><?php echo $this->translate('Job ID'); ?></th>
+                <th scope="col"><?php echo $escape($this->translate('Actions'));?></th>
+                <th scope="col"><?php echo $escape($this->translate('ArchivesSpace collection'));?></th>
+                <th scope="col"><?php echo $escape($this->translate('Comment'));?></th>
+                <th scope="col"><?php echo $escape($this->translate('Items'));?></th>
+                <th scope="col"><?php echo $escape($this->translate('Date'));?></th>
+                <th scope="col"><?php echo $escape($this->translate('Status'));?></th>
+                <th scope="col"><?php echo $escape($this->translate('Owner'));?></th>
             </tr>
         </thead>
         <tbody>
@@ -34,9 +39,9 @@ $escape = $this->plugin('escapeHtml');
         <?php $disableOption = ($job->jobClass() == 'ArchivesspaceConnector\Job\Undo') ? 'disabled' : ''; ?>
         <?php $rerunJob = $import->rerunJob(); ?>
         <tr>
-            <td><?php echo $job->link($job->id()); ?></td>
+            <th scope="row"><?php echo $job->link($job->id()); ?></th>
             <td>
-            <div class="inputs" style="display: flex; flex-direction: column;">
+            <div class="archivesspace-connector-inputs" role="radiogroup" aria-label="<?php echo $this->translate('Action options'); ?>">
                 <label>
                     <input type='radio' name='jobActions[<?php echo $job->id(); ?>]' value checked aria-label="<?php echo $this->translate('[No Action]'); ?>" />
                     <?php echo $this->translate('[No Action]'); ?>
@@ -54,7 +59,7 @@ $escape = $this->plugin('escapeHtml');
             <td>
                 <?php 
                 $args = $job->args();
-                $linkText = isset($args['collection_name']) ? $args['collection_name'] : 'link';
+                $linkText = isset($args['collection_name']) ? $args['collection_name'] : $this->translate('collection link');
                 if ($args['aspace_api_url'] && $args['aspace_target_path']) {
                     $apiUrl = trim($args['aspace_api_url'], '/');
                     $targetPath = trim($args['aspace_target_path'], '/');
@@ -64,10 +69,10 @@ $escape = $this->plugin('escapeHtml');
                 }
                 ?>
             </td>
-            <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+            <td class="archivesspace-comment">
                 <?php echo $import->comment(); ?>
             </td>
-            <td>
+            <td class="archivesspace-items">
                 <?php
                 $linkID = $job->id();
                 $totalCount = $import->addedCount() + $import->updatedCount();
