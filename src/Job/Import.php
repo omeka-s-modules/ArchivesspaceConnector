@@ -181,6 +181,8 @@ class Import extends AbstractJob
                         // Check for children
                         $children = $child->xpath("./ead_ns:dsc/ead_ns:c | ./ead_ns:c");
                         if (!empty($children)) {
+                            // Handle multidimensional hierarchies by saving/retrieving previous state
+                            $prevSet = $itemSet;
                             // If maintain_hierarchy checked, save AS collection/series/subseries/object structure as Hierarchy
                             if ($this->getArg('maintain_hierarchy') && isset($nodeData['uri'])) {
                                 $seriesPath = trim($nodeData['uri'], '/');
@@ -207,6 +209,7 @@ class Import extends AbstractJob
                             }
                             $nodeData['children'] = $iterate($children);
                             $result[] = $nodeData;
+                            $itemSet = $prevSet;
                         } else {
                             // If lowest level resource, import as item
                             $this->importTarget($nodeData['uri'], $itemSet);
