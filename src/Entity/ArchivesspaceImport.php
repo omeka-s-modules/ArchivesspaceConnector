@@ -25,12 +25,23 @@ class ArchivesspaceImport extends AbstractEntity
     /**
      * @Column(type="integer")
      */
-    protected $addedCount;
+    protected $addedItems;
 
     /**
      * @Column(type="integer")
      */
-    protected $updatedCount;
+    protected $updatedItems;
+
+    /**
+     * @Column(type="integer")
+     */
+    protected $addedItemSets;
+
+    /**
+     * @Column(type="integer")
+     */
+    protected $updatedItemSets;
+
     /**
      * @OneToOne(targetEntity="Omeka\Entity\Job")
      * @JoinColumn(nullable=true)
@@ -88,24 +99,44 @@ class ArchivesspaceImport extends AbstractEntity
         return $this->rerunJob;
     }
 
-    public function setAddedCount($count)
+    public function setAddedItems($count)
     {
-        $this->addedCount = $count;
+        $this->addedItems = $count;
     }
 
-    public function getAddedCount()
+    public function getAddedItems()
     {
-        return $this->addedCount;
+        return $this->addedItems;
     }
 
-    public function setUpdatedCount($count)
+    public function setUpdatedItems($count)
     {
-        $this->updatedCount = $count;
+        $this->updatedItems = $count;
     }
 
-    public function getUpdatedCount()
+    public function getUpdatedItems()
     {
-        return $this->updatedCount;
+        return $this->updatedItems;
+    }
+
+    public function setAddedItemSets($count)
+    {
+        $this->addedItemSets = $count;
+    }
+
+    public function getAddedItemSets()
+    {
+        return $this->addedItemSets;
+    }
+
+    public function setUpdatedItemSets($count)
+    {
+        $this->updatedItemSets = $count;
+    }
+
+    public function getUpdatedItemSets()
+    {
+        return $this->updatedItemSets;
     }
 
     public function setComment($comment)

@@ -43,12 +43,20 @@ class ArchivesspaceImportAdapter extends AbstractEntityAdapter
             $entity->setRerunJob($job);
         }
 
-        if (isset($data['added_count'])) {
-            $entity->setAddedCount($data['added_count']);
+        if (isset($data['added_item_count'])) {
+            $entity->setAddedItems($data['added_item_count']);
         }
 
-        if (isset($data['updated_count'])) {
-            $entity->setUpdatedCount($data['updated_count']);
+        if (isset($data['updated_item_count'])) {
+            $entity->setUpdatedItems($data['updated_item_count']);
+        }
+
+        if (isset($data['added_itemset_count'])) {
+            $entity->setAddedItemSets($data['added_itemset_count']);
+        }
+
+        if (isset($data['updated_itemset_count'])) {
+            $entity->setUpdatedItemSets($data['updated_itemset_count']);
         }
 
         if (isset($data['comment'])) {

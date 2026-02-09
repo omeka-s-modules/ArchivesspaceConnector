@@ -67,10 +67,10 @@ class ArchivesspaceImport extends \ArchivesspaceConnector\Entity\ArchivesspaceIm
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'job', 'addedCount', 'updatedCount', 'undoJob', 'rerunJob', 'comment', 'hierarchyId'];
+            return ['__isInitialized__', 'id', 'job', 'addedItems', 'updatedItems', 'addedItemSets', 'updatedItemSets', 'undoJob', 'rerunJob', 'comment', 'hierarchyId'];
         }
 
-        return ['__isInitialized__', 'id', 'job', 'addedCount', 'updatedCount', 'undoJob', 'rerunJob', 'comment', 'hierarchyId'];
+        return ['__isInitialized__', 'id', 'job', 'addedItems', 'updatedItems', 'addedItemSets', 'updatedItemSets', 'undoJob', 'rerunJob', 'comment', 'hierarchyId'];
     }
 
     /**
@@ -133,7 +133,7 @@ class ArchivesspaceImport extends \ArchivesspaceConnector\Entity\ArchivesspaceIm
      * {@inheritDoc}
      * @internal generated method: use only when explicitly handling proxy specific loading logic
      */
-    public function __setInitializer(\Closure $initializer = null): void
+    public function __setInitializer(?\Closure $initializer = null): void
     {
         $this->__initializer__ = $initializer;
     }
@@ -151,7 +151,7 @@ class ArchivesspaceImport extends \ArchivesspaceConnector\Entity\ArchivesspaceIm
      * {@inheritDoc}
      * @internal generated method: use only when explicitly handling proxy specific loading logic
      */
-    public function __setCloner(\Closure $cloner = null): void
+    public function __setCloner(?\Closure $cloner = null): void
     {
         $this->__cloner__ = $cloner;
     }
@@ -261,45 +261,89 @@ class ArchivesspaceImport extends \ArchivesspaceConnector\Entity\ArchivesspaceIm
     /**
      * {@inheritDoc}
      */
-    public function setAddedCount($count)
+    public function setAddedItems($count)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setAddedCount', [$count]);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setAddedItems', [$count]);
 
-        return parent::setAddedCount($count);
+        return parent::setAddedItems($count);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getAddedCount()
+    public function getAddedItems()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAddedCount', []);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAddedItems', []);
 
-        return parent::getAddedCount();
+        return parent::getAddedItems();
     }
 
     /**
      * {@inheritDoc}
      */
-    public function setUpdatedCount($count)
+    public function setUpdatedItems($count)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setUpdatedCount', [$count]);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setUpdatedItems', [$count]);
 
-        return parent::setUpdatedCount($count);
+        return parent::setUpdatedItems($count);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getUpdatedCount()
+    public function getUpdatedItems()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getUpdatedCount', []);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getUpdatedItems', []);
 
-        return parent::getUpdatedCount();
+        return parent::getUpdatedItems();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setAddedItemSets($count)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setAddedItemSets', [$count]);
+
+        return parent::setAddedItemSets($count);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getAddedItemSets()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAddedItemSets', []);
+
+        return parent::getAddedItemSets();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setUpdatedItemSets($count)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setUpdatedItemSets', [$count]);
+
+        return parent::setUpdatedItemSets($count);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getUpdatedItemSets()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getUpdatedItemSets', []);
+
+        return parent::getUpdatedItemSets();
     }
 
     /**

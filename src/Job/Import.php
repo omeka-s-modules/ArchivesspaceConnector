@@ -19,9 +19,13 @@ class Import extends AbstractJob
 
     protected $itemSites;
 
-    protected $addedCount;
+    protected $addedItems;
 
-    protected $updatedCount;
+    protected $updatedItems;
+
+    protected $addedItemSets;
+
+    protected $updatedItemSets;
     
     protected $resourceTemplateId;
 
@@ -38,8 +42,10 @@ class Import extends AbstractJob
         $archivesspaceImportJson = [
                             'o:job' => ['o:id' => $this->job->getId()],
                             'comment' => $comment,
-                            'added_count' => 0,
-                            'updated_count' => 0,
+                            'added_item_count' => 0,
+                            'updated_item_count' => 0,
+                            'added_itemset_count' => 0,
+                            'updated_itemset_count' => 0,
                             'hierarchy_id' => 0,
                           ];
         $response = $this->api->create('archivesspace_imports', $archivesspaceImportJson);
@@ -59,8 +65,8 @@ class Import extends AbstractJob
             $this->fieldIdMap[$field] = $property->id();
         }
 
-        $this->addedCount = 0;
-        $this->updatedCount = 0;
+        $this->addedItems = 0;
+        $this->updatedItems = 0;
         $this->client = $this->getServiceLocator()->get('Omeka\HttpClient');
         $this->itemSiteArray = $this->getArg('itemSites', false);
         $this->previousItemsetArray = $this->getArg('previous_itemset_array', false) ?: [];
@@ -103,8 +109,10 @@ class Import extends AbstractJob
         $archivesspaceImportJson = [
                             'o:job' => ['o:id' => $this->job->getId()],
                             'comment' => $comment,
-                            'added_count' => $this->addedCount,
-                            'updated_count' => $this->updatedCount,
+                            'added_item_count' => $this->addedItems,
+                            'updated_item_count' => $this->updatedItems,
+                            'added_itemset_count' => $this->addedItemSets,
+                            'updated_itemset_count' => $this->updatedItemSets,
                             'hierarchy_id' => $this->hierarchyId,
                           ];
         $response = $this->api->update('archivesspace_imports', $importRecordId, $archivesspaceImportJson);
@@ -334,9 +342,9 @@ class Import extends AbstractJob
         
             if ($archivesspaceItem) {
                 $response = $this->api->update('archivesspace_items', $archivesspaceItem->id(), $archivesspaceItemJson);
-                $this->updatedCount++;
+                $this->updatedItems++;
             } else {
-                $this->addedCount++;
+                $this->addedItems++;
                 $response = $this->api->create('archivesspace_items', $archivesspaceItemJson);
             }
         }
@@ -437,10 +445,12 @@ class Import extends AbstractJob
                     $response = $this->api->update('item_sets', $omekaItemSet->id(), $itemSetData);
                     $itemSet = $response->getContent();
                     $itemSetId = $omekaItemSet->id();
+                    $this->updatedItemSets++;
                 } else {
                     $response = $this->api->create('item_sets', $itemSetData);
                     $itemSet = $response->getContent();
                     $itemSetId = $itemSet->id();
+                    $this->addedItemSets++;
                 }
                 
                 // Keep existing siteItemSets, add new siteItemSet

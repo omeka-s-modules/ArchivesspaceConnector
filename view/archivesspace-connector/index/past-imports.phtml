@@ -26,7 +26,7 @@ $escape = $this->plugin('escapeHtml');
                 <th scope="col"><?php echo $escape($this->translate('Actions'));?></th>
                 <th scope="col"><?php echo $escape($this->translate('ArchivesSpace collection'));?></th>
                 <th scope="col"><?php echo $escape($this->translate('Comment'));?></th>
-                <th scope="col"><?php echo $escape($this->translate('Items'));?></th>
+                <th scope="col"><?php echo $escape($this->translate('Resources'));?></th>
                 <th scope="col"><?php echo $escape($this->translate('Date'));?></th>
                 <th scope="col"><?php echo $escape($this->translate('Status'));?></th>
                 <th scope="col"><?php echo $escape($this->translate('Owner'));?></th>
@@ -72,19 +72,36 @@ $escape = $this->plugin('escapeHtml');
             <td class="archivesspace-comment">
                 <?php echo $import->comment(); ?>
             </td>
-            <td class="archivesspace-items">
+            <td class="archivesspace-resources">
                 <?php
-                $linkID = $job->id();
-                $totalCount = $import->addedCount() + $import->updatedCount();
-                // Only link to search results for Job IDs with associated items
-                $totalResults = $this->api()->search('items', ['archivesspace_import_id' => $linkID]);
-                if ($totalResults->getTotalResults() > 0) {
-                    echo $this->hyperlink('Total: ' . $totalResults->getTotalResults(), $this->url('admin/default', ['controller' => 'item', 'action' => 'browse'], ['query' => ['archivesspace_import_id' => $linkID]]), ['target' => '_blank']) . '<br>';
+                $jobID = $job->id();
+                $totalItemCount = $import->addedItems() + $import->updatedItems();
+                $totalItemsetCount = $import->addedItemSets() + $import->updatedItemSets();
+                // Only link to search results for Job IDs with associated items/itemSets
+                $totalItemResults = $this->api()->search('items', ['archivesspace_import_id' => $jobID]);
+                $totalItemsetResults = $this->api()->search('item_sets', ['archivesspace_import_id' => $jobID]);
+                if ($totalItemResults->getTotalResults() > 0) {
+                    echo $this->hyperlink('Total Items: ' . $totalItemResults->getTotalResults(), $this->url('admin/default', ['controller' => 'item', 'action' => 'browse'], ['query' => ['archivesspace_import_id' => $jobID]]), ['target' => '_blank']) . '<br>';
                 } else {
-                    echo 'Total: ' . $totalCount . '<br>';
+                    echo 'Total Items: ' . $totalItemCount . '<br>';
                 }
-                echo 'Added: ' . $import->addedCount() . '<br>';
-                echo 'Updated: ' . $import->updatedCount();
+                if ($import->addedItems() > 0) {
+                    echo 'Added: ' . $import->addedItems() . '<br>';
+                }
+                if ($import->updatedItems() > 0) {
+                    echo 'Updated: ' . $import->updatedItems() . '<br>';
+                }
+                if ($totalItemsetResults->getTotalResults() > 0) {
+                    echo $this->hyperlink('Total Item Sets: ' . $totalItemsetResults->getTotalResults(), $this->url('admin/default', ['controller' => 'item-set', 'action' => 'browse'], ['query' => ['archivesspace_import_id' => $jobID]]), ['target' => '_blank']) . '<br>';
+                } else {
+                    echo 'Total Item Sets: ' . $totalItemsetCount . '<br>';
+                }
+                if ($import->addedItemSets() > 0) {
+                    echo 'Added: ' . $import->addedItemSets() . '<br>';
+                }
+                if ($import->updatedItemSets() > 0) {
+                    echo 'Updated: ' . $import->updatedItemSets() . '<br>';
+                }
                 ?>
             </td>
             <td><?php echo $escape($this->i18n()->dateFormat($job->started())); ?></td>

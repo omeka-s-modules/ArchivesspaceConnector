@@ -14,8 +14,10 @@ class ArchivesspaceImportRepresentation extends AbstractEntityRepresentation
             $rerun_job = $this->rerunJob()->getReference();
         }
         return [
-            'added_count' => $this->addedCount(),
-            'updated_count' => $this->updatedCount(),
+            'added_item_count' => $this->addedItems(),
+            'updated_item_count' => $this->updatedItems(),
+            'added_itemset_count' => $this->addedItemSets(),
+            'updated_itemset_count' => $this->updatedItemSets(),
             'comment' => $this->comment(),
             'hierarchy_id' => $this->hierarchyId(),
             'o:job' => $this->getReference(),
@@ -52,14 +54,24 @@ class ArchivesspaceImportRepresentation extends AbstractEntityRepresentation
         return $this->resource->getComment();
     }
 
-    public function addedCount()
+    public function addedItems()
     {
-        return $this->resource->getAddedCount();
+        return $this->resource->getAddedItems();
     }
 
-    public function updatedCount()
+    public function updatedItems()
     {
-        return $this->resource->getUpdatedCount();
+        return $this->resource->getUpdatedItems();
+    }
+
+    public function addedItemSets()
+    {
+        return $this->resource->getAddedItemSets();
+    }
+
+    public function updatedItemSets()
+    {
+        return $this->resource->getUpdatedItemSets();
     }
 
     public function hierarchyId()

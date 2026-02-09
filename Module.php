@@ -32,7 +32,7 @@ class Module extends AbstractModule
         $connection = $serviceLocator->get('Omeka\Connection');
         $connection->exec("CREATE TABLE archivesspace_item (id INT AUTO_INCREMENT NOT NULL, item_id INT NOT NULL, job_id INT NOT NULL, aspace_api_url VARCHAR(255) NOT NULL, aspace_target_path VARCHAR(255) NOT NULL, last_modified DATETIME NOT NULL, UNIQUE INDEX UNIQ_3A789461126F525E (item_id), INDEX IDX_3A789461BE04EA9 (job_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB;");
         $connection->exec("CREATE TABLE archivesspace_item_set (id INT AUTO_INCREMENT NOT NULL, item_set_id INT NOT NULL, job_id INT NOT NULL, aspace_api_url VARCHAR(255) NOT NULL, aspace_target_path VARCHAR(255) NOT NULL, last_modified DATETIME NOT NULL, UNIQUE INDEX UNIQ_F3159620960278D7 (item_set_id), INDEX IDX_F3159620BE04EA9 (job_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB;");
-        $connection->exec("CREATE TABLE archivesspace_import (id INT AUTO_INCREMENT NOT NULL, job_id INT NOT NULL, undo_job_id INT DEFAULT NULL, rerun_job_id INT DEFAULT NULL, added_count INT NOT NULL, updated_count INT NOT NULL, comment LONGTEXT DEFAULT NULL, hierarchy_id INT NOT NULL, UNIQUE INDEX UNIQ_898F0D5DBE04EA9 (job_id), UNIQUE INDEX UNIQ_898F0D5D4C276F75 (undo_job_id), UNIQUE INDEX UNIQ_898F0D5D7071F49C (rerun_job_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB;");
+        $connection->exec("CREATE TABLE archivesspace_import (id INT AUTO_INCREMENT NOT NULL, job_id INT NOT NULL, undo_job_id INT DEFAULT NULL, rerun_job_id INT DEFAULT NULL, added_items INT NOT NULL, updated_items INT NOT NULL, added_item_sets INT NOT NULL, updated_item_sets INT NOT NULL, comment LONGTEXT DEFAULT NULL, hierarchy_id INT NOT NULL, UNIQUE INDEX UNIQ_898F0D5DBE04EA9 (job_id), UNIQUE INDEX UNIQ_898F0D5D4C276F75 (undo_job_id), UNIQUE INDEX UNIQ_898F0D5D7071F49C (rerun_job_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB;");
         $connection->exec("ALTER TABLE archivesspace_item ADD CONSTRAINT FK_3A789461126F525E FOREIGN KEY (item_id) REFERENCES item (id) ON DELETE CASCADE;");
         $connection->exec("ALTER TABLE archivesspace_item ADD CONSTRAINT FK_3A789461BE04EA9 FOREIGN KEY (job_id) REFERENCES job (id);");
         $connection->exec("ALTER TABLE archivesspace_item_set ADD CONSTRAINT FK_F3159620960278D7 FOREIGN KEY (item_set_id) REFERENCES item_set (id) ON DELETE CASCADE;");
@@ -74,7 +74,13 @@ class Module extends AbstractModule
         $sharedEventManager->attach(
             \Omeka\Api\Adapter\ItemAdapter::class,
             'api.search.query',
-            [$this, 'importSearch']
+            [$this, 'itemSearch']
+        );
+
+        $sharedEventManager->attach(
+            \Omeka\Api\Adapter\ItemSetAdapter::class,
+            'api.search.query',
+            [$this, 'itemSetSearch']
         );
     }
 
@@ -115,7 +121,7 @@ class Module extends AbstractModule
         }
     }
 
-    public function importSearch($event)
+    public function itemSearch($event)
     {
         $query = $event->getParam('request')->getContent();
         if (isset($query['archivesspace_import_id'])) {
@@ -127,6 +133,23 @@ class Module extends AbstractModule
                 'WITH', "$importItemAlias.item = omeka_root.id"
             )->andWhere($qb->expr()->eq(
                 "$importItemAlias.job",
+                $adapter->createNamedParameter($qb, $query['archivesspace_import_id'])
+            ));
+        }
+    }
+
+    public function itemSetSearch($event)
+    {
+        $query = $event->getParam('request')->getContent();
+        if (isset($query['archivesspace_import_id'])) {
+            $qb = $event->getParam('queryBuilder');
+            $adapter = $event->getTarget();
+            $importItemSetAlias = $adapter->createAlias();
+            $qb->innerJoin(
+                \ArchivesspaceConnector\Entity\ArchivesspaceItemSet::class, $importItemSetAlias,
+                'WITH', "$importItemSetAlias.itemSet = omeka_root.id"
+            )->andWhere($qb->expr()->eq(
+                "$importItemSetAlias.job",
                 $adapter->createNamedParameter($qb, $query['archivesspace_import_id'])
             ));
         }
