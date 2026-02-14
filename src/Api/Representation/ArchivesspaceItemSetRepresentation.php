@@ -8,11 +8,11 @@ class ArchivesspaceItemSetRepresentation extends AbstractEntityRepresentation
     public function getJsonLd()
     {
         return [
-            'last_modified' => $this->getLastModified(),
-            'aspace_api_url' => $this->getApiUrl(),
-            'aspace_target_path' => $this->getTargetPath(),
-            'o:item_set' => $this->getReference(),
-            'o:job' => $this->getReference(),
+            'last_modified' => $this->lastModified(),
+            'aspace_api_url' => $this->apiUrl(),
+            'aspace_target_path' => $this->targetPath(),
+            'o:item_set' => $this->itemSet(),
+            'o:job' => $this->job(),
         ];
     }
 
