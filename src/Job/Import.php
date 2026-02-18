@@ -419,86 +419,81 @@ class Import extends AbstractJob
 
         // Ensure valid xml
         $xml = @simplexml_load_string($body);
-        if ($xml) {            
+        if ($xml) {
             // Get series dcterms XML metadata
             $xml->registerXPathNamespace($this->prefix, $this->namespace);
             $dcterms = $xml->xpath('//' . $this->prefix . ':*');
             if ($dcterms) {
                 $itemSetData = [];
                 foreach ($dcterms as $dcterm) {
-                    if ($dcterm->getName() == 'title') {
-                        $itemSetData['dcterms:title'] = [
-                                ['@value' => (string) $dcterm,
-                                'property_id' => $this->fieldIdMap['title'],
-                                'type' => 'literal',
-                                ], ];
-                    }
-                    if ($dcterm->getName() == 'description') {
-                        $itemSetData['dcterms:description'] = [
-                                ['@value' => (string) $dcterm,
-                                'property_id' => $this->fieldIdMap['description'],
-                                'type' => 'literal',
-                                ], ];
-                    }
-                    if ($dcterm->getName() == 'rights') {
-                        $itemSetData['dcterms:rights'] = [
-                                ['@value' => (string) $dcterm,
-                                'property_id' => $this->fieldIdMap['rights'],
-                                'type' => 'literal',
-                                ], ];
-                    }
-                }
+                    $dcFieldname = $dcterm->getName();
+                    $dcValue = (string) $dcterm;
 
-                if ($omekaItemSet) {
-                    $response = $this->api->update('item_sets', $omekaItemSet->id(), $itemSetData);
-                    $itemSet = $response->getContent();
-                    $itemSetId = $omekaItemSet->id();
-                    $this->updatedItemSets++;
-                } else {
-                    $response = $this->api->create('item_sets', $itemSetData);
-                    $itemSet = $response->getContent();
-                    $itemSetId = $itemSet->id();
-                    $this->addedItemSets++;
-                }
-                
-                // Keep existing siteItemSets, add new siteItemSet
-                foreach ($this->itemSiteArray as $site) {
-                    $siteItemSetsUpdate = [];
-                    $siteEntity = $this->api->search('sites', ['id' => (int) $site])->getContent()[0];
-                    foreach ($siteEntity->siteItemSets() as $siteItemSet) {
-                        $siteItemSetsUpdate['o:site_item_set'][]['o:item_set']['o:id'] = $siteItemSet->itemSet()->id();
+                    if (isset($this->fieldIdMap[$dcFieldname])) {
+                        $fieldId = $this->fieldIdMap[$dcFieldname];
+                    } else {
+                        continue;
                     }
-                    $siteItemSetsUpdate['o:site_item_set'][]['o:item_set']['o:id'] = $itemSetId;
-                    $this->api->update('sites', $siteEntity->id(), $siteItemSetsUpdate, [], ['isPartial' => true]);
-                }
 
-                // Get date last modified
-                $xml->registerXPathNamespace('ns', $this->baseNs);
-                $datestamp = $xml->xpath("//ns:header/ns:datestamp");
-                if ($datestamp) {
-                    $date = (string) $datestamp[0];
-                    $lastModified = new \DateTime($date);
-                } else {
-                    $lastModified = null;
+                    $valueArray = [];
+                    $valueArray['@value'] = $dcValue;
+                    $valueArray['type'] = 'literal';
+                    $valueArray['property_id'] = $fieldId;
+                    $itemSetData[$dcFieldname][] = $valueArray;
                 }
-
-                $archivesspaceItemSetJson = [
-                                    'o:job' => ['o:id' => $this->job->getId()],
-                                    'o:item_set' => ['o:id' => $itemSetId],
-                                    'aspace_api_url' => $this->apiUrl,
-                                    'aspace_target_path' => $uri,
-                                    'last_modified' => $lastModified,
-                                  ];              
-            
-                if ($archivesspaceItemSet) {
-                    $response = $this->api->update('archivesspace_item_sets', $archivesspaceItemSet->id(), $archivesspaceItemSetJson);
-                } else {
-                    $response = $this->api->create('archivesspace_item_sets', $archivesspaceItemSetJson);
-                }
-                return $itemSet;
             } else {
-                return;
-            }    
+                $itemSetData = [];
+            }
+
+            if ($omekaItemSet) {
+                $response = $this->api->update('item_sets', $omekaItemSet->id(), $itemSetData);
+                $itemSet = $response->getContent();
+                $itemSetId = $omekaItemSet->id();
+                $this->updatedItemSets++;
+            } else {
+                $response = $this->api->create('item_sets', $itemSetData);
+                $itemSet = $response->getContent();
+                $itemSetId = $itemSet->id();
+                $this->addedItemSets++;
+            }
+            
+            // Keep existing siteItemSets, add new siteItemSet
+            foreach ($this->itemSiteArray as $site) {
+                $siteItemSetsUpdate = [];
+                $siteEntity = $this->api->search('sites', ['id' => (int) $site])->getContent()[0];
+                foreach ($siteEntity->siteItemSets() as $siteItemSet) {
+                    $siteItemSetsUpdate['o:site_item_set'][]['o:item_set']['o:id'] = $siteItemSet->itemSet()->id();
+                }
+                $siteItemSetsUpdate['o:site_item_set'][]['o:item_set']['o:id'] = $itemSetId;
+                $this->api->update('sites', $siteEntity->id(), $siteItemSetsUpdate, [], ['isPartial' => true]);
+            }
+
+            // Get date last modified
+            $xml->registerXPathNamespace('ns', $this->baseNs);
+            $datestamp = $xml->xpath("//ns:header/ns:datestamp");
+            if ($datestamp) {
+                $date = (string) $datestamp[0];
+                $lastModified = new \DateTime($date);
+            } else {
+                $lastModified = null;
+            }
+
+            $archivesspaceItemSetJson = [
+                                'o:job' => ['o:id' => $this->job->getId()],
+                                'o:item_set' => ['o:id' => $itemSetId],
+                                'aspace_api_url' => $this->apiUrl,
+                                'aspace_target_path' => $uri,
+                                'last_modified' => $lastModified,
+                              ];
+
+            if ($archivesspaceItemSet) {
+                $response = $this->api->update('archivesspace_item_sets', $archivesspaceItemSet->id(), $archivesspaceItemSetJson);
+            } else {
+                $response = $this->api->create('archivesspace_item_sets', $archivesspaceItemSetJson);
+            }
+
+            return $itemSet;
+
         } else {
             return;
         }
