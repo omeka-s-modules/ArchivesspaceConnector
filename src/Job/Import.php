@@ -176,28 +176,33 @@ class Import extends AbstractJob
                 // Loop through children/grandchildren and save as nested array
                 $iterate = function ($XML) use (&$iterate, &$itemSet) {
                     $result = [];
-                    foreach ($XML as $key => $childXML) {
+                    foreach ($XML as $childXML) {
                         $child = $childXML[0];
                         $child->registerXPathNamespace('ead_ns', $this->eadNs);
-
+                
                         $nodeData = [];
                         $childUri = $child->xpath("./ead_ns:did/ead_ns:unitid[@type='aspace_uri']");
                         if (!empty($childUri)) {
                             $nodeData['uri'] = (string) $childUri[0];
+                        } else {
+                            $nodeData['uri'] = '';
                         }
-
-                        // Check for children
-                        $children = $child->xpath("./ead_ns:dsc/ead_ns:c | ./ead_ns:c");
-                        if (!empty($children)) {
+                
+                        if ((string) $child['level'] === 'item') {
+                            // Only import items if labeled, treat everything else as container below
+                            $this->importTarget($nodeData['uri'], $itemSet);
+                        } else {
                             // Handle multidimensional hierarchies by saving/retrieving previous state
                             $prevSet = $itemSet;
+
                             // If maintain_hierarchy checked, save AS collection/series/subseries/object structure as Hierarchy
                             if ($this->getArg('maintain_hierarchy') && isset($nodeData['uri'])) {
                                 $seriesPath = trim($nodeData['uri'], '/');
+
                                 // Create/Update item set
                                 $itemSet = $this->createItemSet($seriesPath);
                                 $itemSetLabel = $itemSet ? $itemSet->displayTitle() : '';
-
+                
                                 if ($this->rerun && $this->getArg('hierarchy_id')) {
                                     // If hierarchy grouping(s) already exist, delete and recreate on update to avoid duplication
                                     // or errors if another grouping in the hierarchy has since been assigned the same itemSet
@@ -208,19 +213,22 @@ class Import extends AbstractJob
                                         $this->api->delete('hierarchy_grouping', $grouping->id());
                                     }
                                 }
-
                                 $nodeData['text'] = $itemSetLabel;
                                 $nodeData['data']['label'] = $itemSetLabel;
                                 $nodeData['data']['itemSet'] = $itemSet ? $itemSet->id() : null;
                             } else {
                                 $itemSet = null;
                             }
-                            $nodeData['children'] = $iterate($children);
+
+                            // Check for children
+                            $children = $child->xpath("./ead_ns:dsc/ead_ns:c | ./ead_ns:c");
+                            if (!empty($children)) {
+                                $nodeData['children'] = $iterate($children);
+                            } else {
+                                $nodeData['children'] = [];
+                            }
                             $result[] = $nodeData;
                             $itemSet = $prevSet;
-                        } else {
-                            // If lowest level resource, import as item
-                            $this->importTarget($nodeData['uri'], $itemSet);
                         }
                     }
                     return $result;
