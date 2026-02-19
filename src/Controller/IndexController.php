@@ -30,7 +30,13 @@ class IndexController extends AbstractActionController
             if ($form->isValid()) {
                 $job = $this->jobDispatcher()->dispatch('ArchivesspaceConnector\Job\Import', $data);
                 // ArchivesspaceImport record is created in the job
-                $message = new Message('Importing in Job ID %s', $job->getId()); // @translate
+                $message = new Message(
+                        '%s <a target="_blank" href="%s">%s</a>',
+                        $this->translate('Importing in: '),
+                        htmlspecialchars($this->url()->fromRoute('admin/id', ['controller' => 'job', 'id' => $job->getId()])),
+                        $this->translate('Job #') . $job->getId(),
+                );
+                $message->setEscapeHtml(false);
                 $this->messenger()->addSuccess($message);
                 $view->setVariable('job', $job);
                 return $this->redirect()->toRoute('admin/archivesspace-connector/past-imports');
@@ -44,29 +50,46 @@ class IndexController extends AbstractActionController
 
     public function pastImportsAction()
     {
+        $view = new ViewModel;
         if ($this->getRequest()->isPost()) {
             $data = $this->params()->fromPost();
             if (isset($data['jobActions'])) {
                 $undoJobIds = [];
+                $currentUndoJobLinks = [];
                 $rerunJobIds = [];
+                $currentRerunJobLinks = [];
                 foreach ($data['jobActions'] as $jobId => $action) {
                     if ($action == 'undo') {
-                        $this->undoJob($jobId);
                         $undoJobIds[] = $jobId;
+                        $job = $this->undoJob($jobId);
+                        $currentUndoJobLinks[] = sprintf('<a target="_blank" href="%s">%s</a>', $this->url()->fromRoute('admin/id', ['controller' => 'job', 'id' => $job->getId()]), $this->translate('Job #') . $job->getId());
                     }
                     if ($action == 'rerun') {
-                        $this->rerunJob($jobId);
                         $rerunJobIds[] = $jobId;
+                        $job = $this->rerunJob($jobId);
+                        $currentRerunJobLinks[] = sprintf('<a target="_blank" href="%s">%s</a>', $this->url()->fromRoute('admin/id', ['controller' => 'job', 'id' => $job->getId()]), $this->translate('Job #') . $job->getId());
                     }
                 }
                 if (!empty($undoJobIds)) {
-                    $message = new Message('Undo in progress on the following jobs: %s', // @translate
-                        implode(', ', $undoJobIds));
+                    $message = new Message(
+                            '%s %s %s %s',
+                            $this->translate('Undo in progress in: '),
+                            implode(', ', $currentUndoJobLinks),
+                            $this->translate(' for the following jobs: '),
+                            implode(', ', $undoJobIds),
+                    );
+                    $message->setEscapeHtml(false);
                     $this->messenger()->addSuccess($message);
                 }
                 if (!empty($rerunJobIds)) {
-                    $message = new Message('Rerun in progress on the following jobs: %s', // @translate
-                        implode(', ', $rerunJobIds));
+                    $message = new Message(
+                            '%s %s %s %s',
+                            $this->translate('Rerun in progress in: '),
+                            implode(', ', $currentUndoJobLinks),
+                            $this->translate(' for the following jobs: '),
+                            implode(', ', $undoJobIds),
+                    );
+                    $message->setEscapeHtml(false);
                     $this->messenger()->addSuccess($message);
                 }
             } else {
@@ -74,7 +97,6 @@ class IndexController extends AbstractActionController
             }
             return $this->redirect()->toRoute('admin/archivesspace-connector/past-imports');
         }
-        $view = new ViewModel;
         $page = $this->params()->fromQuery('page', 1);
         $query = $this->params()->fromQuery() + [
             'page' => $page,
@@ -104,6 +126,7 @@ class IndexController extends AbstractActionController
                     'o:undo_job' => ['o:id' => $job->getId() ],
                 ]
             );
+        return $job;
     }
 
     protected function rerunJob($jobId)
@@ -124,6 +147,7 @@ class IndexController extends AbstractActionController
                     'o:rerun_job' => ['o:id' => $job->getId() ],
                 ]
             );
+        return $job;
     }
 
 }
