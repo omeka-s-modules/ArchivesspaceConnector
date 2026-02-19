@@ -50,8 +50,10 @@ class Undo extends AbstractJob
         $archivesspaceImportJson = [
                             'o:job' => ['o:id' => $this->job->getId()],
                             'comment' => $comment,
-                            'added_count' => 0,
-                            'updated_count' => 0,
+                            'added_item_count' => 0,
+                            'updated_item_count' => 0,
+                            'added_itemset_count' => 0,
+                            'updated_itemset_count' => 0,
                             'hierarchy_id' => 0,
                           ];
         $response = $api->create('archivesspace_imports', $archivesspaceImportJson);
