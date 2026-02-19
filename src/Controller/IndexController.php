@@ -85,9 +85,9 @@ class IndexController extends AbstractActionController
                     $message = new Message(
                             '%s %s %s %s',
                             $this->translate('Rerun in progress in: '),
-                            implode(', ', $currentUndoJobLinks),
+                            implode(', ', $currentRerunJobLinks),
                             $this->translate(' for the following jobs: '),
-                            implode(', ', $undoJobIds),
+                            implode(', ', $rerunJobIds),
                     );
                     $message->setEscapeHtml(false);
                     $this->messenger()->addSuccess($message);

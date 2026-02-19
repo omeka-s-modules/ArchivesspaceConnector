@@ -21,7 +21,7 @@ class Undo extends AbstractJob
             foreach ($archivesspaceItems as $archivesspaceItem) {
                 $archivesspaceResponse = $api->delete('archivesspace_items', $archivesspaceItem->id());
                 $itemResponse = $api->delete('items', $archivesspaceItem->item()->id());
-                $deletedCount++;
+                $deletedItemCount++;
             }
         }
         
@@ -32,6 +32,7 @@ class Undo extends AbstractJob
             foreach ($archivesspaceItemSets as $archivesspaceItemSet) {
                 $archivesspaceResponse = $api->delete('archivesspace_item_sets', $archivesspaceItemSet->id());
                 $itemSetResponse = $api->delete('item_sets', $archivesspaceItemSet->itemSet()->id());
+                $deletedItemSetCount++;
             }
         }
 
@@ -43,9 +44,13 @@ class Undo extends AbstractJob
         ];
         $hierarchyUpdater->updateHierarchy($hierarchyData);
 
-        if ($deletedCount) {
-            $deletedComment = $deletedCount . ' items deleted';
-            $comment = strlen($comment) ? $comment . '; ' . $deletedComment : $deletedComment;
+        if ($deletedItemCount) {
+            $deletedItemComment = $deletedItemCount . ' items deleted';
+            $comment = strlen($comment) ? $comment . '; ' . $deletedItemComment : $deletedItemComment;
+        }
+        if ($deletedItemSetCount) {
+            $deletedItemSetComment = $deletedItemSetCount . ' item sets deleted';
+            $comment = strlen($comment) ? $comment . '; ' . $deletedItemSetComment : $deletedItemSetComment;
         }
         $archivesspaceImportJson = [
                             'o:job' => ['o:id' => $this->job->getId()],
