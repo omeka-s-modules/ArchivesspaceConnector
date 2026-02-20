@@ -89,6 +89,25 @@ class ImportForm extends Form
                 'value' => $disableHierarchy ? false : true,
             ],
         ]);
+
+        $this->add([
+            'name' => 'import_item_level',
+            'type' => Select::class,
+            'attributes' => [
+                'id' => 'import-item-level',
+                'class' => 'chosen-select',
+                'value' => 'item',
+            ],
+            'options' => [
+                'label' => 'Omeka item level', // @translate
+                'info' => 'Select which level(s) of ArchivesSpace resource to import as Omeka items.', // @translate
+                'value_options' => [
+                    'item' => 'Item', // @translate
+                    'file' => 'File', // @translate
+                    'item_and_file' => 'Item & File', // @translate
+                ],
+            ],
+        ]);
         
         $this->add([
             'name' => 'delete_missing_items',

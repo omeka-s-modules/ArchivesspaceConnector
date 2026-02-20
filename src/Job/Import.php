@@ -187,13 +187,23 @@ class Import extends AbstractJob
                         } else {
                             $nodeData['uri'] = '';
                         }
-                
-                        if ((string) $child['level'] === 'item') {
-                            // Only import items if labeled, treat everything else as container below
+
+                        if ($this->getArg('import_item_level') === 'item' && (string) $child['level'] === 'item') {
+                            // Only import items if labeled as items
+                            $this->importTarget($nodeData['uri'], $itemSet);
+                        } else if ($this->getArg('import_item_level') === 'file' && (string) $child['level'] === 'file') {
+                            // Only import items if labeled as files
+                            $this->importTarget($nodeData['uri'], $itemSet);
+                        } else if ($this->getArg('import_item_level') === 'item_and_file' 
+                            && ((string) $child['level'] === 'item' || (string) $child['level'] === 'file')) {
+                            // Only import items if labeled as items OR files
                             $this->importTarget($nodeData['uri'], $itemSet);
                         } else {
+                            // Treat everything else as container (if maintain_hierarchy checked)
                             // Handle multidimensional hierarchies by saving/retrieving previous state
-                            $prevSet = $itemSet;
+                            if (!empty($itemSet)) {
+                                $prevSet = $itemSet;
+                            }
 
                             // If maintain_hierarchy checked, save AS collection/series/subseries/object structure as Hierarchy
                             if ($this->getArg('maintain_hierarchy') && isset($nodeData['uri'])) {
@@ -219,15 +229,17 @@ class Import extends AbstractJob
                             } else {
                                 $itemSet = null;
                             }
+                        }
 
-                            // Check for children
-                            $children = $child->xpath("./ead_ns:dsc/ead_ns:c | ./ead_ns:c");
-                            if (!empty($children)) {
-                                $nodeData['children'] = $iterate($children);
-                            } else {
-                                $nodeData['children'] = [];
-                            }
-                            $result[] = $nodeData;
+                        // Check for children
+                        $children = $child->xpath("./ead_ns:dsc/ead_ns:c | ./ead_ns:c");
+                        if (!empty($children)) {
+                            $nodeData['children'] = $iterate($children);
+                        } else {
+                            $nodeData['children'] = [];
+                        }
+                        $result[] = $nodeData;
+                        if (!empty($prevSet)) {
                             $itemSet = $prevSet;
                         }
                     }
