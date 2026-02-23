@@ -15,6 +15,8 @@ class Import extends AbstractJob
     
     protected $logger;
 
+    protected $siteSettings;
+
     protected $itemSetArray;
 
     protected $itemSites;
@@ -37,6 +39,7 @@ class Import extends AbstractJob
     {
         $this->api = $this->getServiceLocator()->get('Omeka\ApiManager');
         $this->logger = $this->getServiceLocator()->get('Omeka\Logger');
+        $this->siteSettings = $this->getServiceLocator()->get('Omeka\Settings\Site');
         $comment = $this->getArg('comment');
         $this->rerun = $this->getArg('rerun');
         $archivesspaceImportJson = [
@@ -262,6 +265,14 @@ class Import extends AbstractJob
                         'id' => $this->getArg('hierarchy_id') ?: null,
                     ];
                     $this->hierarchyId = $hierarchyUpdater->updateHierarchy($hierarchyData);
+
+                    // Add Hierarchy to selected site(s)
+                    foreach ($this->itemSiteArray as $siteID) {
+                        $this->siteSettings->setTargetId($siteID);
+                        $siteHierarchies = $this->siteSettings->get('site_hierarchies') ?: [];
+                        $siteHierarchies[] = ['id' => $this->hierarchyId];
+                        $this->siteSettings->set('site_hierarchies', $siteHierarchies);
+                    }
                 }
             }     
         }
