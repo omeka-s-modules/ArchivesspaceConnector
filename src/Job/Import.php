@@ -177,6 +177,7 @@ class Import extends AbstractJob
                 $iterate = function ($XML) use (&$iterate, &$itemSet) {
                     $result = [];
                     foreach ($XML as $childXML) {
+                        $isItem = false;
                         $child = $childXML[0];
                         $child->registerXPathNamespace('ead_ns', $this->eadNs);
                 
@@ -191,15 +192,18 @@ class Import extends AbstractJob
                         if ($this->getArg('import_item_level') === 'item' && (string) $child['level'] === 'item') {
                             // Only import items if labeled as items
                             $this->importTarget($nodeData['uri'], $itemSet);
+                            $isItem = true;
                         } else if ($this->getArg('import_item_level') === 'file' && (string) $child['level'] === 'file') {
                             // Only import items if labeled as files
                             $this->importTarget($nodeData['uri'], $itemSet);
+                            $isItem = true;
                         } else if ($this->getArg('import_item_level') === 'item_and_file' 
                             && ((string) $child['level'] === 'item' || (string) $child['level'] === 'file')) {
                             // Only import items if labeled as items OR files
                             $this->importTarget($nodeData['uri'], $itemSet);
-                        } else {
-                            // Treat everything else as container (if maintain_hierarchy checked)
+                            $isItem = true;
+                        } else if ((string) $child['level'] !== 'item') {
+                            // Never treat items as containers but treat everything else as container (if maintain_hierarchy checked)
                             // Handle multidimensional hierarchies by saving/retrieving previous state
                             if (!empty($itemSet)) {
                                 $prevSet = $itemSet;
@@ -238,7 +242,9 @@ class Import extends AbstractJob
                         } else {
                             $nodeData['children'] = [];
                         }
-                        $result[] = $nodeData;
+                        if ($isItem !== true && (string) $child['level'] !== 'item'){
+                            $result[] = $nodeData;
+                        }
                         if (!empty($prevSet)) {
                             $itemSet = $prevSet;
                         }
