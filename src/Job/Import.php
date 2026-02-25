@@ -474,18 +474,28 @@ class Import extends AbstractJob
                 $itemSetData = [];
             }
 
-            if ($omekaItemSet) {
-                $response = $this->api->update('item_sets', $omekaItemSet->id(), $itemSetData);
-                $itemSet = $response->getContent();
-                $itemSetId = $omekaItemSet->id();
-                $this->updatedItemSets++;
-            } else {
-                $response = $this->api->create('item_sets', $itemSetData);
-                $itemSet = $response->getContent();
-                $itemSetId = $itemSet->id();
-                $this->addedItemSets++;
+            if ($this->resourceTemplateId) {
+                $itemSetData['o:resource_template']['o:id'] = (int) $this->resourceTemplateId;
             }
-            
+
+            try {
+                if ($omekaItemSet) {
+                    $response = $this->api->update('item_sets', $omekaItemSet->id(), $itemSetData);
+                    $itemSet = $response->getContent();
+                    $itemSetId = $omekaItemSet->id();
+                    $this->updatedItemSets++;
+                } else {
+                    $response = $this->api->create('item_sets', $itemSetData);
+                    $itemSet = $response->getContent();
+                    $itemSetId = $itemSet->id();
+                    $this->addedItemSets++;
+                }
+            } catch (\Exception $e) {
+                $this->logger->err('Error importing resource with URI: ' . $uri); // @translate
+                $this->logger->err((string) $e);
+                return;
+            }
+
             // Keep existing siteItemSets, add new siteItemSet
             foreach ($this->itemSiteArray as $site) {
                 $siteItemSetsUpdate = [];
