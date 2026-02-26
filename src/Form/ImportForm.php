@@ -81,7 +81,7 @@ class ImportForm extends Form
             'type' => 'checkbox',
             'options' => [
                 'label' => 'Maintain collection hierarchy', // @translate
-                'info' => '(Requires Hierarchy module) If checked, mimic ArchivesSpace collection structure by creating item sets for collection/series/subseries & organizing hierarchically with corresponding resources. Otherwise, import only lowest level Archival Object resources.', // @translate
+                'info' => 'Requires Hierarchy module. If checked, mimic ArchivesSpace collection structure by creating item sets for collection/series/subseries/etc. & organizing hierarchically with corresponding resources. If unchecked, import only Omeka item equivalent resources as chosen below.', // @translate
             ],
             'attributes' => [
                 'id' => 'maintain-hierarchy',
@@ -99,12 +99,12 @@ class ImportForm extends Form
                 'value' => 'item',
             ],
             'options' => [
-                'label' => 'Omeka item level', // @translate
-                'info' => 'Select which level(s) of ArchivesSpace resource to import as Omeka items.', // @translate
+                'label' => 'Omeka item equivalent', // @translate
+                'info' => 'Select which type(s) of ArchivesSpace resources to import as Omeka items (marked as level=[x] in the API). If "Maintain collection hierarchy" is checked above, all other resources will import as item sets.', // @translate
                 'value_options' => [
-                    'item' => 'Item', // @translate
-                    'file' => 'File', // @translate
-                    'item_and_file' => 'Item & File', // @translate
+                    'item' => 'ArchivesSpace Item', // @translate
+                    'file' => 'ArchivesSpace File', // @translate
+                    'item_and_file' => 'ArchivesSpace Item & File', // @translate
                 ],
             ],
         ]);
