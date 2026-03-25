@@ -95,7 +95,6 @@ class Module extends AbstractModule
                 $archivesspaceResources = $response->getContent();
                 if (!empty($archivesspaceResources)) {
                     $archivesspaceResource = $archivesspaceResources[0];
-                    $resourceTitle = $view->translate('link');
                 }
                 break;
             case 'Omeka\Api\Representation\ItemSetRepresentation':
@@ -103,20 +102,20 @@ class Module extends AbstractModule
                 $archivesspaceResources = $response->getContent();
                 if (!empty($archivesspaceResources)) {
                     $archivesspaceResource = $archivesspaceResources[0];
-                    $resourceTitle = $view->translate('link');
                 }
                 break;
             default:
                 return;
         }
-        
+
         if (!empty($archivesspaceResource)) {
             $targetPath = trim($archivesspaceResource->targetPath(), '/');
             $parsedUrl = parse_url($archivesspaceResource->apiUrl());
             $resourceLink = sprintf('%s://%s/%s', $parsedUrl['scheme'], $parsedUrl['host'], $targetPath);
+            $linkLabel = $resource->displayTitle() ?: $view->translate('link');
             echo '<div class="meta-group">';
             echo '<h4>' . $view->translate('Original') . '</h4>';
-            echo '<div class="value"><a href="' . $resourceLink . '" target="_blank">' . $resourceTitle . '</a></div>';
+            echo '<div class="value"><a href="' . $resourceLink . '" target="_blank">' . $view->escapeHtml($linkLabel) . '</a></div>';
             echo '<div class="value">' . $view->translate('Last Modified: ') . ' ' . $view->i18n()->dateFormat($archivesspaceResource->lastModified()) . '</div></div>';
         }
     }
