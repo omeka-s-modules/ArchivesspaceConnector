@@ -3,11 +3,8 @@ namespace ArchivesspaceConnector;
 
 use Omeka\Module\AbstractModule;
 use Laminas\ServiceManager\ServiceLocatorInterface;
-use Laminas\View\Renderer\PhpRenderer;
-use Laminas\Mvc\Controller\AbstractController;
 use Laminas\EventManager\SharedEventManagerInterface;
 use Laminas\Mvc\MvcEvent;
-use Composer\Semver\Comparator;
 
 class Module extends AbstractModule
 {
@@ -24,7 +21,7 @@ class Module extends AbstractModule
             null,
             ['ArchivesspaceConnector\Api\Adapter\ArchivesspaceItemAdapter'],
             ['search', 'read']
-            );
+        );
     }
 
     public function install(ServiceLocatorInterface $serviceLocator)

@@ -3,7 +3,6 @@ namespace ArchivesspaceConnector\Job;
 
 use Omeka\Job\AbstractJob;
 use Omeka\Entity\ItemSet;
-use Omeka\Api\Exception\NotFoundException;
 
 class Import extends AbstractJob
 {
@@ -12,7 +11,7 @@ class Import extends AbstractJob
     protected $propertyUriIdMap;
 
     protected $api;
-    
+
     protected $logger;
 
     protected $siteSettings;
@@ -28,7 +27,7 @@ class Import extends AbstractJob
     protected $addedItemSets;
 
     protected $updatedItemSets;
-    
+
     protected $resourceTemplateId;
 
     protected $hierarchyId;
@@ -43,17 +42,17 @@ class Import extends AbstractJob
         $comment = $this->getArg('comment');
         $this->rerun = $this->getArg('rerun');
         $archivesspaceImportJson = [
-                            'o:job' => ['o:id' => $this->job->getId()],
-                            'comment' => $comment,
-                            'added_item_count' => 0,
-                            'updated_item_count' => 0,
-                            'added_itemset_count' => 0,
-                            'updated_itemset_count' => 0,
-                            'hierarchy_id' => 0,
-                          ];
+            'o:job' => ['o:id' => $this->job->getId()],
+            'comment' => $comment,
+            'added_item_count' => 0,
+            'updated_item_count' => 0,
+            'added_itemset_count' => 0,
+            'updated_itemset_count' => 0,
+            'hierarchy_id' => 0,
+        ];
         $response = $this->api->create('archivesspace_imports', $archivesspaceImportJson);
         $importRecordId = $response->getContent()->id();
-        
+
         // Build dcterms metadata field map
         $this->fieldIdMap = [];
         $this->prefix = 'dcterms';
@@ -74,16 +73,16 @@ class Import extends AbstractJob
         $this->itemSiteArray = $this->getArg('itemSites', false);
         $this->previousItemsetArray = $this->getArg('previous_itemset_array', false) ?: [];
         $this->resourceTemplateId = (int) $this->getArg('resource_template', 0);
-        
+
         if ($this->getArg('aspace_api_url') && $this->getArg('aspace_target_path')) {
             $this->apiUrl = trim($this->getArg('aspace_api_url'), '/');
             $targetPath = trim($this->getArg('aspace_target_path'), '/');
             $this->mainUri = $this->apiUrl . '/oai?verb=GetRecord&identifier=oai:archivesspace:/'
-            . $targetPath . '&metadataPrefix=oai_ead';  
+            . $targetPath . '&metadataPrefix=oai_ead';
         } else {
             $this->mainUri = '';
         }
-        
+
         // If maintain_hierarchy checked and hierarchy module not found or not latest version, skip
         $container = $this->getServiceLocator();
         if ($this->getArg('maintain_hierarchy') && !$container->has(\Hierarchy\Service\HierarchyUpdater\HierarchyUpdater::class)
@@ -110,19 +109,19 @@ class Import extends AbstractJob
         }
 
         $archivesspaceImportJson = [
-                            'o:job' => ['o:id' => $this->job->getId()],
-                            'comment' => $comment,
-                            'added_item_count' => $this->addedItems,
-                            'updated_item_count' => $this->updatedItems,
-                            'added_itemset_count' => $this->addedItemSets,
-                            'updated_itemset_count' => $this->updatedItemSets,
-                            'hierarchy_id' => $this->hierarchyId,
-                          ];
+            'o:job' => ['o:id' => $this->job->getId()],
+            'comment' => $comment,
+            'added_item_count' => $this->addedItems,
+            'updated_item_count' => $this->updatedItems,
+            'added_itemset_count' => $this->addedItemSets,
+            'updated_itemset_count' => $this->updatedItemSets,
+            'hierarchy_id' => $this->hierarchyId,
+        ];
         $response = $this->api->update('archivesspace_imports', $importRecordId, $archivesspaceImportJson);
     }
 
     public function importCollection($uri)
-    {        
+    {
         $this->client->setUri($uri);
         try {
             $response = $this->client->send();
@@ -134,7 +133,7 @@ class Import extends AbstractJob
         }
 
         $body = $response->getBody();
-        
+
         // Ensure valid xml
         $xml = @simplexml_load_string($body);
         if ($xml) {
@@ -183,7 +182,7 @@ class Import extends AbstractJob
                         $isItem = false;
                         $child = $childXML[0];
                         $child->registerXPathNamespace('ead_ns', $this->eadNs);
-                
+
                         $nodeData = [];
                         $childUri = $child->xpath("./ead_ns:did/ead_ns:unitid[@type='aspace_uri']");
                         if (!empty($childUri)) {
@@ -196,16 +195,16 @@ class Import extends AbstractJob
                             // Only import items if labeled as items
                             $this->importTarget($nodeData['uri'], $itemSet);
                             $isItem = true;
-                        } else if ($this->getArg('import_item_level') === 'file' && (string) $child['level'] === 'file') {
+                        } elseif ($this->getArg('import_item_level') === 'file' && (string) $child['level'] === 'file') {
                             // Only import items if labeled as files
                             $this->importTarget($nodeData['uri'], $itemSet);
                             $isItem = true;
-                        } else if ($this->getArg('import_item_level') === 'item_and_file' 
+                        } elseif ($this->getArg('import_item_level') === 'item_and_file'
                             && ((string) $child['level'] === 'item' || (string) $child['level'] === 'file')) {
                             // Only import items if labeled as items OR files
                             $this->importTarget($nodeData['uri'], $itemSet);
                             $isItem = true;
-                        } else if ((string) $child['level'] !== 'item') {
+                        } elseif ((string) $child['level'] !== 'item') {
                             // Never treat items as containers but treat everything else as container (if maintain_hierarchy checked)
                             // Handle multidimensional hierarchies by saving/retrieving previous state
                             if (!empty($itemSet)) {
@@ -219,7 +218,7 @@ class Import extends AbstractJob
                                 // Create/Update item set
                                 $itemSet = $this->createItemSet($seriesPath);
                                 $itemSetLabel = $itemSet ? $itemSet->displayTitle() : '';
-                
+
                                 if ($this->rerun && $this->getArg('hierarchy_id')) {
                                     // If hierarchy grouping(s) already exist, delete and recreate on update to avoid duplication
                                     // or errors if another grouping in the hierarchy has since been assigned the same itemSet
@@ -245,7 +244,7 @@ class Import extends AbstractJob
                         } else {
                             $nodeData['children'] = [];
                         }
-                        if ($isItem !== true && (string) $child['level'] !== 'item'){
+                        if ($isItem !== true && (string) $child['level'] !== 'item') {
                             $result[] = $nodeData;
                         }
                         if (!empty($prevSet)) {
@@ -255,12 +254,12 @@ class Import extends AbstractJob
                     return $result;
                 };
                 $asObjectArray = $iterate([$target])[0];
-                
+
                 // Build Hierarchy if maintain_hierarchy checked
                 if ($this->getArg('maintain_hierarchy') && !empty($asObjectArray)) {
                     $hierarchyUpdater = $this->getServiceLocator()->get(\Hierarchy\Service\HierarchyUpdater\HierarchyUpdater::class);
                     $hierarchyData = [
-                        'label' => isset($asObjectArray['text']) ? $asObjectArray['text'] : '',
+                        'label' => $asObjectArray['text'] ?? '',
                         'data' => '[' . json_encode($asObjectArray) . ']',
                         'id' => $this->getArg('hierarchy_id') ?: null,
                     ];
@@ -274,7 +273,7 @@ class Import extends AbstractJob
                         $this->siteSettings->set('site_hierarchies', $siteHierarchies);
                     }
                 }
-            }     
+            }
         }
     }
 
@@ -299,7 +298,7 @@ class Import extends AbstractJob
 
         $uriPath = trim($uri, '/');
         $this->targetUri = $this->apiUrl . '/oai?verb=GetRecord&identifier=oai:archivesspace:/'
-        . $uriPath . '&metadataPrefix=oai_dcterms'; 
+        . $uriPath . '&metadataPrefix=oai_dcterms';
         $this->client->setUri($this->targetUri);
         $response = $this->client->send();
         $body = $response->getBody();
@@ -308,20 +307,20 @@ class Import extends AbstractJob
         $xml = @simplexml_load_string($body);
         if ($xml) {
             $json = $this->resourceToJson($xml);
-        
+
             if ($omekaItem) {
                 // keep existing item sites, add any new item sites
                 $existingItem = $this->api->search('items', ['id' => $omekaItem->id()])->getContent();
-            
+
                 $existingItemSites = array_keys($existingItem[0]->sites()) ?: [];
                 $newItemSites = $json['o:site'] ?: [];
                 $json['o:site'] = array_merge($existingItemSites, $newItemSites);
-                
+
                 $existingItemSets = array_keys($existingItem[0]->itemSets()) ?: [];
 
                 // Add newly created item set to existing item sets
                 if (isset($itemSet) && !in_array($itemSet->id(), $existingItemSets)) {
-                    $json['o:item_set'] = array_merge($existingItemSets, array($itemSet->id()));
+                    $json['o:item_set'] = array_merge($existingItemSets, [$itemSet->id()]);
                 } else {
                     $json['o:item_set'] = $existingItemSets;
                 }
@@ -329,7 +328,7 @@ class Import extends AbstractJob
                 if ($this->resourceTemplateId) {
                     $json['o:resource_template']['o:id'] = (int) $this->resourceTemplateId;
                 }
-                
+
                 try {
                     $response = $this->api->update('items', $omekaItem->id(), $json);
                     $itemId = $omekaItem->id();
@@ -358,7 +357,7 @@ class Import extends AbstractJob
                     return;
                 }
             }
-        
+
             // Get date last modified
             $xml->registerXPathNamespace('ns', $this->baseNs);
             $datestamp = $xml->xpath("//ns:header/ns:datestamp");
@@ -368,15 +367,15 @@ class Import extends AbstractJob
             } else {
                 $lastModified = null;
             }
-        
+
             $archivesspaceItemJson = [
-                                'o:job' => ['o:id' => $this->job->getId()],
-                                'o:item' => ['o:id' => $itemId],
-                                'aspace_api_url' => $this->apiUrl,
-                                'aspace_target_path' => $uri,
-                                'last_modified' => $lastModified,
-                              ];              
-        
+                'o:job' => ['o:id' => $this->job->getId()],
+                'o:item' => ['o:id' => $itemId],
+                'aspace_api_url' => $this->apiUrl,
+                'aspace_target_path' => $uri,
+                'last_modified' => $lastModified,
+            ];
+
             if ($archivesspaceItem) {
                 $response = $this->api->update('archivesspace_items', $archivesspaceItem->id(), $archivesspaceItemJson);
                 $this->updatedItems++;
@@ -398,7 +397,7 @@ class Import extends AbstractJob
         } else {
             $json['o:site'] = [];
         }
-        
+
         // Get target dcterms XML metadata
         $xml->registerXPathNamespace($this->prefix, $this->namespace);
         $dcterms = $xml->xpath('//' . $this->prefix . ':*');
@@ -412,7 +411,7 @@ class Import extends AbstractJob
                 } else {
                     continue;
                 }
-                
+
                 $valueArray = [];
                 $valueArray['@value'] = $dcValue;
                 $valueArray['type'] = 'literal';
@@ -424,7 +423,7 @@ class Import extends AbstractJob
             return;
         }
     }
-    
+
     protected function createItemSet($uri)
     {
         // See if the item set has already been imported
@@ -437,11 +436,11 @@ class Import extends AbstractJob
             $archivesspaceItemSet = $content[0];
             $omekaItemSet = $archivesspaceItemSet->itemSet();
         }
-        
+
         // Get series API page for metadata
         $seriesPath = trim($uri, '/');
         $seriesUri = $this->apiUrl . '/oai?verb=GetRecord&identifier=oai:archivesspace:/'
-        . $seriesPath . '&metadataPrefix=oai_dcterms';  
+        . $seriesPath . '&metadataPrefix=oai_dcterms';
         $this->client->setUri($seriesUri);
         $seriesResponse = $this->client->send();
         $body = $seriesResponse->getBody();
@@ -518,12 +517,12 @@ class Import extends AbstractJob
             }
 
             $archivesspaceItemSetJson = [
-                                'o:job' => ['o:id' => $this->job->getId()],
-                                'o:item_set' => ['o:id' => $itemSetId],
-                                'aspace_api_url' => $this->apiUrl,
-                                'aspace_target_path' => $uri,
-                                'last_modified' => $lastModified,
-                              ];
+                'o:job' => ['o:id' => $this->job->getId()],
+                'o:item_set' => ['o:id' => $itemSetId],
+                'aspace_api_url' => $this->apiUrl,
+                'aspace_target_path' => $uri,
+                'last_modified' => $lastModified,
+            ];
 
             if ($archivesspaceItemSet) {
                 $response = $this->api->update('archivesspace_item_sets', $archivesspaceItemSet->id(), $archivesspaceItemSetJson);

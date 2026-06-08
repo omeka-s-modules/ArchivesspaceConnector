@@ -6,7 +6,7 @@ use Omeka\Job\AbstractJob;
 class Undo extends AbstractJob
 {
     protected $deletedCount;
-    
+
     public function perform()
     {
         $jobId = $this->getArg('previous_job');
@@ -24,7 +24,7 @@ class Undo extends AbstractJob
                 $deletedItemCount++;
             }
         }
-        
+
         // Delete item sets
         $response = $api->search('archivesspace_item_sets', ['job_id' => $jobId]);
         $archivesspaceItemSets = $response->getContent();
@@ -53,14 +53,14 @@ class Undo extends AbstractJob
             $comment = strlen($comment) ? $comment . '; ' . $deletedItemSetComment : $deletedItemSetComment;
         }
         $archivesspaceImportJson = [
-                            'o:job' => ['o:id' => $this->job->getId()],
-                            'comment' => $comment,
-                            'added_item_count' => 0,
-                            'updated_item_count' => 0,
-                            'added_itemset_count' => 0,
-                            'updated_itemset_count' => 0,
-                            'hierarchy_id' => 0,
-                          ];
+            'o:job' => ['o:id' => $this->job->getId()],
+            'comment' => $comment,
+            'added_item_count' => 0,
+            'updated_item_count' => 0,
+            'added_itemset_count' => 0,
+            'updated_itemset_count' => 0,
+            'hierarchy_id' => 0,
+        ];
         $response = $api->create('archivesspace_imports', $archivesspaceImportJson);
         $jobArgs = $this->job->getArgs();
         $jobArgs['comment'] = $comment;

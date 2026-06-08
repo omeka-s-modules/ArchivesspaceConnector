@@ -5,7 +5,6 @@ use Omeka\Stdlib\Message;
 use ArchivesspaceConnector\Form\ImportForm;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\ViewModel;
-use Laminas\Dom\Query;
 
 class IndexController extends AbstractActionController
 {
@@ -31,10 +30,10 @@ class IndexController extends AbstractActionController
                 $job = $this->jobDispatcher()->dispatch('ArchivesspaceConnector\Job\Import', $data);
                 // ArchivesspaceImport record is created in the job
                 $message = new Message(
-                        '%s <a target="_blank" href="%s">%s</a>',
-                        $this->translate('Importing in: '),
-                        htmlspecialchars($this->url()->fromRoute('admin/id', ['controller' => 'job', 'id' => $job->getId()])),
-                        $this->translate('Job #') . $job->getId(),
+                    '%s <a target="_blank" href="%s">%s</a>',
+                    $this->translate('Importing in: '),
+                    htmlspecialchars($this->url()->fromRoute('admin/id', ['controller' => 'job', 'id' => $job->getId()])),
+                    $this->translate('Job #') . $job->getId(),
                 );
                 $message->setEscapeHtml(false);
                 $this->messenger()->addSuccess($message);
@@ -72,22 +71,22 @@ class IndexController extends AbstractActionController
                 }
                 if (!empty($undoJobIds)) {
                     $message = new Message(
-                            '%s %s %s %s',
-                            $this->translate('Undo in progress in: '),
-                            implode(', ', $currentUndoJobLinks),
-                            $this->translate(' for the following jobs: '),
-                            implode(', ', $undoJobIds),
+                        '%s %s %s %s',
+                        $this->translate('Undo in progress in: '),
+                        implode(', ', $currentUndoJobLinks),
+                        $this->translate(' for the following jobs: '),
+                        implode(', ', $undoJobIds),
                     );
                     $message->setEscapeHtml(false);
                     $this->messenger()->addSuccess($message);
                 }
                 if (!empty($rerunJobIds)) {
                     $message = new Message(
-                            '%s %s %s %s',
-                            $this->translate('Rerun in progress in: '),
-                            implode(', ', $currentRerunJobLinks),
-                            $this->translate(' for the following jobs: '),
-                            implode(', ', $rerunJobIds),
+                        '%s %s %s %s',
+                        $this->translate('Rerun in progress in: '),
+                        implode(', ', $currentRerunJobLinks),
+                        $this->translate(' for the following jobs: '),
+                        implode(', ', $rerunJobIds),
                     );
                     $message->setEscapeHtml(false);
                     $this->messenger()->addSuccess($message);
@@ -121,18 +120,18 @@ class IndexController extends AbstractActionController
         $deleteData['previous_job'] = $jobId;
         $job = $this->jobDispatcher()->dispatch('ArchivesspaceConnector\Job\Undo', $deleteData);
         $response = $this->api()->update('archivesspace_imports',
-                $archivesspaceImport->id(),
-                [
-                    'o:undo_job' => ['o:id' => $job->getId() ],
-                ]
-            );
+            $archivesspaceImport->id(),
+            [
+                'o:undo_job' => ['o:id' => $job->getId() ],
+            ]
+        );
         return $job;
     }
 
     protected function rerunJob($jobId)
     {
         $response = $this->api()->search('archivesspace_imports', ['job_id' => $jobId]);
-        $archivesspaceImport = $response->getContent()[0];    
+        $archivesspaceImport = $response->getContent()[0];
         // Get original import job args to run again
         $rerunData = $archivesspaceImport->job()->args();
         // Set previous job's created hierarchy (if any) to check against for updates
@@ -142,11 +141,11 @@ class IndexController extends AbstractActionController
         $rerunData['previous_job'] = $jobId;
         $job = $this->jobDispatcher()->dispatch('ArchivesspaceConnector\Job\Import', $rerunData);
         $response = $this->api()->update('archivesspace_imports',
-                $archivesspaceImport->id(),
-                [
-                    'o:rerun_job' => ['o:id' => $job->getId() ],
-                ]
-            );
+            $archivesspaceImport->id(),
+            [
+                'o:rerun_job' => ['o:id' => $job->getId() ],
+            ]
+        );
         return $job;
     }
 

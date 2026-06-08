@@ -58,7 +58,7 @@ class ArchivesspaceImport extends AbstractEntity
      * @Column(type="text", nullable=true)
      */
     protected $comment;
-    
+
     /**
      * @Column(type="integer")
      */

@@ -62,7 +62,7 @@ class ArchivesspaceImportAdapter extends AbstractEntityAdapter
         if (isset($data['comment'])) {
             $entity->setComment($data['comment']);
         }
-        
+
         if (isset($data['hierarchy_id'])) {
             $entity->setHierarchyId($data['hierarchy_id']);
         }

@@ -1,7 +1,6 @@
 <?php
 namespace ArchivesspaceConnector\Form;
 
-use Omeka\Form\Element\ItemSetSelect;
 use Omeka\Form\Element\SiteSelect;
 use Laminas\Form\Element\Select;
 use Omeka\Settings\UserSettings;
@@ -27,12 +26,12 @@ class ImportForm extends Form
      * @var ApiManager
      */
     protected $apiManager;
-    
+
     /**
      * @var ModuleManager
      */
     protected $moduleManager;
-    
+
     /**
      * @var UrlHelper
      */
@@ -41,7 +40,7 @@ class ImportForm extends Form
     public function init()
     {
         $urlHelper = $this->getUrlHelper();
-        
+
         $this->add([
             'name' => 'aspace_api_url',
             'type' => 'url',
@@ -54,7 +53,7 @@ class ImportForm extends Form
                 'required' => true,
             ],
         ]);
-        
+
         $this->add([
             'name' => 'aspace_target_path',
             'type' => 'text',
@@ -75,7 +74,7 @@ class ImportForm extends Form
         } else {
             $disableHierarchy = true;
         }
-        
+
         $this->add([
             'name' => 'maintain_hierarchy',
             'type' => 'checkbox',
@@ -108,7 +107,7 @@ class ImportForm extends Form
                 ],
             ],
         ]);
-        
+
         $this->add([
             'name' => 'delete_missing_items',
             'type' => 'checkbox',
@@ -232,7 +231,7 @@ class ImportForm extends Form
     {
         return $this->AuthenticationService;
     }
-    
+
     /**
      * @param Url $urlHelper
      */
@@ -264,7 +263,7 @@ class ImportForm extends Form
     {
         return $this->apiManager;
     }
-    
+
     public function setModuleManager(ModuleManager $moduleManager)
     {
         $this->moduleManager = $moduleManager;
