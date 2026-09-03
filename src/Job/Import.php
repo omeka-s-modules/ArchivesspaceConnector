@@ -306,6 +306,13 @@ class Import extends AbstractJob
         // Ensure valid xml
         $xml = @simplexml_load_string($body);
         if ($xml) {
+            $xml->registerXPathNamespace('ns', $this->baseNs);
+            $error = $xml->xpath('//ns:error');
+            if ($error) {
+                $this->logger->err('OAI error for URI: ' . $uri . ': ' . (string) $error[0]); // @translate
+                return;
+            }
+
             $json = $this->resourceToJson($xml);
 
             if ($omekaItem) {
@@ -448,6 +455,13 @@ class Import extends AbstractJob
         // Ensure valid xml
         $xml = @simplexml_load_string($body);
         if ($xml) {
+            $xml->registerXPathNamespace('ns', $this->baseNs);
+            $error = $xml->xpath('//ns:error');
+            if ($error) {
+                $this->logger->err('OAI error for URI: ' . $uri . ': ' . (string) $error[0]); // @translate
+                return;
+            }
+
             // Get series dcterms XML metadata
             $xml->registerXPathNamespace($this->prefix, $this->namespace);
             $dcterms = $xml->xpath('//' . $this->prefix . ':*');
