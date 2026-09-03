@@ -77,7 +77,7 @@ class Import extends AbstractJob
         if ($this->getArg('aspace_api_url') && $this->getArg('aspace_target_path')) {
             $this->apiUrl = trim($this->getArg('aspace_api_url'), '/');
             $targetPath = trim($this->getArg('aspace_target_path'), '/');
-            $this->mainUri = $this->apiUrl . '/oai?verb=GetRecord&identifier=oai:archivesspace:/'
+            $this->mainUri = $this->apiUrl . '/oai?verb=GetRecord&identifier=/'
             . $targetPath . '&metadataPrefix=oai_ead';
         } else {
             $this->mainUri = '';
@@ -297,7 +297,7 @@ class Import extends AbstractJob
         }
 
         $uriPath = trim($uri, '/');
-        $this->targetUri = $this->apiUrl . '/oai?verb=GetRecord&identifier=oai:archivesspace:/'
+        $this->targetUri = $this->apiUrl . '/oai?verb=GetRecord&identifier=/'
         . $uriPath . '&metadataPrefix=oai_dcterms';
         $this->client->setUri($this->targetUri);
         $response = $this->client->send();
@@ -439,7 +439,7 @@ class Import extends AbstractJob
 
         // Get series API page for metadata
         $seriesPath = trim($uri, '/');
-        $seriesUri = $this->apiUrl . '/oai?verb=GetRecord&identifier=oai:archivesspace:/'
+        $seriesUri = $this->apiUrl . '/oai?verb=GetRecord&identifier=/'
         . $seriesPath . '&metadataPrefix=oai_dcterms';
         $this->client->setUri($seriesUri);
         $seriesResponse = $this->client->send();

@@ -63,7 +63,7 @@ $escape = $this->plugin('escapeHtml');
                 if ($args['aspace_api_url'] && $args['aspace_target_path']) {
                     $apiUrl = trim($args['aspace_api_url'], '/');
                     $targetPath = trim($args['aspace_target_path'], '/');
-                    $aspaceLink = $apiUrl . '/oai?verb=GetRecord&identifier=oai:archivesspace:/'
+                    $aspaceLink = $apiUrl . '/oai?verb=GetRecord&identifier=/'
                     . $targetPath . '&metadataPrefix=oai_ead';
                     echo $this->hyperlink($linkText, $aspaceLink, ['target' => '_blank']);
                 }
