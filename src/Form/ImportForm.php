@@ -45,8 +45,8 @@ class ImportForm extends Form
             'name' => 'aspace_api_url',
             'type' => 'url',
             'options' => [
-                'label' => 'ArchivesSpace API URL', // @translate
-                'info' => 'The URL of the ArchiveSpace instance to import from. Example: https://sandbox.archivesspace.org/staff/api/', // @translate
+                'label' => 'ArchivesSpace OAI URL', // @translate
+                'info' => 'The OAI URL endpoint of the ArchiveSpace instance to import from, with the  "oai?" string removed. Example: https://sandbox.archivesspace.org/staff/api/', // @translate
             ],
             'attributes' => [
                 'id' => 'aspace_api_url',
@@ -99,7 +99,7 @@ class ImportForm extends Form
             ],
             'options' => [
                 'label' => 'Omeka item equivalent', // @translate
-                'info' => 'Select which type(s) of ArchivesSpace resources to import as Omeka items (marked as level=[x] in the API). If "Maintain collection hierarchy" is checked above, all other resources will import as item sets.', // @translate
+                'info' => 'Select which type(s) of ArchivesSpace resources to import as Omeka items (marked as level=[x] in the OAI). If "Maintain collection hierarchy" is checked above, all other resources will import as item sets.', // @translate
                 'value_options' => [
                     'item' => 'ArchivesSpace Item', // @translate
                     'file' => 'ArchivesSpace File', // @translate
