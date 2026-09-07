@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-26 12:26-0800\n"
+"POT-Creation-Date: 2026-09-03 16:23-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,32 +17,32 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: Module.php:98 Module.php:106
+#: Module.php:112
 msgid "link"
 msgstr ""
 
-#: Module.php:120
+#: Module.php:116
 msgid "Last Modified: "
 msgstr ""
 
-#: src/Controller/IndexController.php:35
+#: src/Controller/IndexController.php:34
 msgid "Importing in: "
 msgstr ""
 
-#: src/Controller/IndexController.php:37 src/Controller/IndexController.php:65
-#: src/Controller/IndexController.php:70
+#: src/Controller/IndexController.php:36 src/Controller/IndexController.php:64
+#: src/Controller/IndexController.php:69
 msgid "Job #"
 msgstr ""
 
-#: src/Controller/IndexController.php:76
+#: src/Controller/IndexController.php:75
 msgid "Undo in progress in: "
 msgstr ""
 
-#: src/Controller/IndexController.php:78 src/Controller/IndexController.php:89
+#: src/Controller/IndexController.php:77 src/Controller/IndexController.php:88
 msgid " for the following jobs: "
 msgstr ""
 
-#: src/Controller/IndexController.php:87
+#: src/Controller/IndexController.php:86
 msgid "Rerun in progress in: "
 msgstr ""
 
@@ -103,31 +103,32 @@ msgstr ""
 msgid "Undone in job "
 msgstr ""
 
+#: src/Form/ImportForm.php:48
+msgid "ArchivesSpace OAI URL"
+msgstr ""
+
 #: src/Form/ImportForm.php:49
-msgid "ArchivesSpace API URL"
-msgstr ""
-
-#: src/Form/ImportForm.php:50
 msgid ""
-"The URL of the ArchiveSpace instance to import from. Example: https://"
-"sandbox.archivesspace.org/staff/api/"
+"The OAI URL endpoint of the ArchiveSpace instance to import from, with the  "
+"\"oai?\" string removed. Example: https://sandbox.archivesspace.org/staff/"
+"api/"
 msgstr ""
 
-#: src/Form/ImportForm.php:62
+#: src/Form/ImportForm.php:61
 msgid "ArchivesSpace target path"
 msgstr ""
 
-#: src/Form/ImportForm.php:63
+#: src/Form/ImportForm.php:62
 msgid ""
 "The path to the ArchivesSpace collection you wish to import. Example: /"
 "repositories/2/resources/138"
 msgstr ""
 
-#: src/Form/ImportForm.php:83
+#: src/Form/ImportForm.php:82
 msgid "Maintain collection hierarchy"
 msgstr ""
 
-#: src/Form/ImportForm.php:84
+#: src/Form/ImportForm.php:83
 msgid ""
 "Requires Hierarchy module. If checked, mimic ArchivesSpace collection "
 "structure by creating item sets for collection/series/subseries/etc. & "
@@ -135,64 +136,68 @@ msgid ""
 "only Omeka item equivalent resources as chosen below."
 msgstr ""
 
-#: src/Form/ImportForm.php:102
+#: src/Form/ImportForm.php:101
 msgid "Omeka item equivalent"
 msgstr ""
 
-#: src/Form/ImportForm.php:103
+#: src/Form/ImportForm.php:102
 msgid ""
 "Select which type(s) of ArchivesSpace resources to import as Omeka items "
-"(marked as level=[x] in the API). If \"Maintain collection hierarchy\" is "
+"(marked as level=[x] in the OAI). If \"Maintain collection hierarchy\" is "
 "checked above, all other resources will import as item sets."
 msgstr ""
 
-#: src/Form/ImportForm.php:105
+#: src/Form/ImportForm.php:104
 msgid "ArchivesSpace Item"
 msgstr ""
 
-#: src/Form/ImportForm.php:106
+#: src/Form/ImportForm.php:105
 msgid "ArchivesSpace File"
 msgstr ""
 
-#: src/Form/ImportForm.php:107
+#: src/Form/ImportForm.php:106
 msgid "ArchivesSpace Item & File"
 msgstr ""
 
-#: src/Form/ImportForm.php:116
+#: src/Form/ImportForm.php:115
 msgid "Delete missing items on update"
 msgstr ""
 
-#: src/Form/ImportForm.php:117
+#: src/Form/ImportForm.php:116
 msgid ""
 "Delete Omeka S items not found in ArchivesSpace on a rerun/update. If "
 "unchecked, items removed from ArchivesSpace collection will remain in Omeka "
 "S."
 msgstr ""
 
-#: src/Form/ImportForm.php:130
+#: src/Form/ImportForm.php:129
 msgid "A note about the purpose or source of this import"
 msgstr ""
 
-#: src/Form/ImportForm.php:153
+#: src/Form/ImportForm.php:152
 msgid "Assign a resource template to all imported resources."
 msgstr ""
 
-#: src/Form/ImportForm.php:178
+#: src/Form/ImportForm.php:177
 msgid "Select site(s)"
 msgstr ""
 
-#: src/Form/ImportForm.php:184
+#: src/Form/ImportForm.php:183
 msgid "Optional. Import new items, item sets and hierarchy into site(s)."
 msgstr ""
 
-#: src/Controller/IndexController.php:44
+#: src/Controller/IndexController.php:43
 msgid "There was an error during validation"
 msgstr ""
 
-#: src/Controller/IndexController.php:96
+#: src/Controller/IndexController.php:95
 msgid "Error: no jobs selected"
 msgstr ""
 
-#: src/Job/Import.php:337 src/Job/Import.php:356 src/Job/Import.php:494
+#: src/Job/Import.php:312 src/Job/Import.php:461
+msgid ": "
+msgstr ""
+
+#: src/Job/Import.php:343 src/Job/Import.php:362 src/Job/Import.php:507
 msgid "Error importing resource with URI: "
 msgstr ""
