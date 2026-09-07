@@ -1,0 +1,207 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+# Translators:
+# Rivo Zängov <eraser@eraser.ee>, 2026
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-03 16:23-0700\n"
+"PO-Revision-Date: 2026-03-03 19:54+0000\n"
+"Last-Translator: Rivo Zängov <eraser@eraser.ee>, 2026\n"
+"Language-Team: Estonian (https://app.transifex.com/omeka/teams/14184/et/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: et\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: Module.php:112
+msgid "link"
+msgstr "link"
+
+#: Module.php:116
+msgid "Last Modified: "
+msgstr "Viimati muudetud:"
+
+#: src/Controller/IndexController.php:34
+msgid "Importing in: "
+msgstr ""
+
+#: src/Controller/IndexController.php:36 src/Controller/IndexController.php:64
+#: src/Controller/IndexController.php:69
+msgid "Job #"
+msgstr "Töö nr."
+
+#: src/Controller/IndexController.php:75
+msgid "Undo in progress in: "
+msgstr ""
+
+#: src/Controller/IndexController.php:77 src/Controller/IndexController.php:88
+msgid " for the following jobs: "
+msgstr ""
+
+#: src/Controller/IndexController.php:86
+msgid "Rerun in progress in: "
+msgstr ""
+
+#: view/archivesspace-connector/index/index.phtml:8
+#: view/archivesspace-connector/index/past-imports.phtml:7
+msgid "ArchivesSpace Connector"
+msgstr ""
+
+#: view/archivesspace-connector/index/index.phtml:8
+msgid "Import Settings"
+msgstr "Importimise seaded"
+
+#: view/archivesspace-connector/index/past-imports.phtml:7
+#: view/archivesspace-connector/index/past-imports.phtml:22
+msgid "Past Imports"
+msgstr "Varasemad impotrimised"
+
+#: view/archivesspace-connector/index/past-imports.phtml:25
+msgid "Job ID"
+msgstr "Töö nr."
+
+#: view/archivesspace-connector/index/past-imports.phtml:26
+msgid "Actions"
+msgstr "Toimingud"
+
+#: view/archivesspace-connector/index/past-imports.phtml:27
+msgid "ArchivesSpace collection"
+msgstr ""
+
+#: view/archivesspace-connector/index/past-imports.phtml:44
+msgid "Action options"
+msgstr "Toimingu valikud"
+
+#: view/archivesspace-connector/index/past-imports.phtml:46
+#: view/archivesspace-connector/index/past-imports.phtml:47
+msgid "[No Action]"
+msgstr "[Toimingut pole]"
+
+#: view/archivesspace-connector/index/past-imports.phtml:50
+#: view/archivesspace-connector/index/past-imports.phtml:51
+msgid "Undo"
+msgstr "Tühista"
+
+#: view/archivesspace-connector/index/past-imports.phtml:54
+#: view/archivesspace-connector/index/past-imports.phtml:55
+msgid "Re-run"
+msgstr "Käivita uuesti"
+
+#: view/archivesspace-connector/index/past-imports.phtml:62
+msgid "collection link"
+msgstr "kogu link"
+
+#: view/archivesspace-connector/index/past-imports.phtml:111
+msgid "Reran in job "
+msgstr "Käivitati uuesti töös"
+
+#: view/archivesspace-connector/index/past-imports.phtml:113
+msgid "Undone in job "
+msgstr "Tühistatud töös"
+
+#: src/Form/ImportForm.php:48
+msgid "ArchivesSpace OAI URL"
+msgstr ""
+
+#: src/Form/ImportForm.php:49
+msgid ""
+"The OAI URL endpoint of the ArchiveSpace instance to import from, with the  "
+"\"oai?\" string removed. Example: "
+"https://sandbox.archivesspace.org/staff/api/"
+msgstr ""
+
+#: src/Form/ImportForm.php:61
+msgid "ArchivesSpace target path"
+msgstr ""
+
+#: src/Form/ImportForm.php:62
+msgid ""
+"The path to the ArchivesSpace collection you wish to import. Example: "
+"/repositories/2/resources/138"
+msgstr ""
+
+#: src/Form/ImportForm.php:82
+msgid "Maintain collection hierarchy"
+msgstr ""
+
+#: src/Form/ImportForm.php:83
+msgid ""
+"Requires Hierarchy module. If checked, mimic ArchivesSpace collection "
+"structure by creating item sets for collection/series/subseries/etc. & "
+"organizing hierarchically with corresponding resources. If unchecked, import"
+" only Omeka item equivalent resources as chosen below."
+msgstr ""
+
+#: src/Form/ImportForm.php:101
+msgid "Omeka item equivalent"
+msgstr ""
+
+#: src/Form/ImportForm.php:102
+msgid ""
+"Select which type(s) of ArchivesSpace resources to import as Omeka items "
+"(marked as level=[x] in the OAI). If \"Maintain collection hierarchy\" is "
+"checked above, all other resources will import as item sets."
+msgstr ""
+
+#: src/Form/ImportForm.php:104
+msgid "ArchivesSpace Item"
+msgstr ""
+
+#: src/Form/ImportForm.php:105
+msgid "ArchivesSpace File"
+msgstr ""
+
+#: src/Form/ImportForm.php:106
+msgid "ArchivesSpace Item & File"
+msgstr ""
+
+#: src/Form/ImportForm.php:115
+msgid "Delete missing items on update"
+msgstr ""
+
+#: src/Form/ImportForm.php:116
+msgid ""
+"Delete Omeka S items not found in ArchivesSpace on a rerun/update. If "
+"unchecked, items removed from ArchivesSpace collection will remain in Omeka "
+"S."
+msgstr ""
+
+#: src/Form/ImportForm.php:129
+msgid "A note about the purpose or source of this import"
+msgstr ""
+
+#: src/Form/ImportForm.php:152
+msgid "Assign a resource template to all imported resources."
+msgstr ""
+
+#: src/Form/ImportForm.php:177
+msgid "Select site(s)"
+msgstr "Vali sait(saidid)"
+
+#: src/Form/ImportForm.php:183
+msgid "Optional. Import new items, item sets and hierarchy into site(s)."
+msgstr ""
+
+#: src/Controller/IndexController.php:43
+msgid "There was an error during validation"
+msgstr ""
+
+#: src/Controller/IndexController.php:95
+msgid "Error: no jobs selected"
+msgstr ""
+
+#: src/Job/Import.php:312 src/Job/Import.php:461
+msgid ": "
+msgstr ""
+
+#: src/Job/Import.php:343 src/Job/Import.php:362 src/Job/Import.php:507
+msgid "Error importing resource with URI: "
+msgstr ""

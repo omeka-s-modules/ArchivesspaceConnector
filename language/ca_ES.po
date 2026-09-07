@@ -1,0 +1,219 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+# Translators:
+# Rubén Alcaraz Martínez <rubenalcarazmartinez@gmail.com>, 2026
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-03 16:23-0700\n"
+"PO-Revision-Date: 2026-03-03 19:54+0000\n"
+"Last-Translator: Rubén Alcaraz Martínez <rubenalcarazmartinez@gmail.com>, 2026\n"
+"Language-Team: Catalan (Spain) (https://app.transifex.com/omeka/teams/14184/ca_ES/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ca_ES\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: Module.php:112
+msgid "link"
+msgstr "hipervincle"
+
+#: Module.php:116
+msgid "Last Modified: "
+msgstr "Darrera modificació:"
+
+#: src/Controller/IndexController.php:34
+msgid "Importing in: "
+msgstr "S'està important a:"
+
+#: src/Controller/IndexController.php:36 src/Controller/IndexController.php:64
+#: src/Controller/IndexController.php:69
+msgid "Job #"
+msgstr "Procés #"
+
+#: src/Controller/IndexController.php:75
+msgid "Undo in progress in: "
+msgstr "S'està desfent l'operació a:"
+
+#: src/Controller/IndexController.php:77 src/Controller/IndexController.php:88
+msgid " for the following jobs: "
+msgstr "per als processos següents:"
+
+#: src/Controller/IndexController.php:86
+msgid "Rerun in progress in: "
+msgstr "Reexecució en procés a:"
+
+#: view/archivesspace-connector/index/index.phtml:8
+#: view/archivesspace-connector/index/past-imports.phtml:7
+msgid "ArchivesSpace Connector"
+msgstr "ArchivesSpace Connector"
+
+#: view/archivesspace-connector/index/index.phtml:8
+msgid "Import Settings"
+msgstr "Paràmetres de la importació"
+
+#: view/archivesspace-connector/index/past-imports.phtml:7
+#: view/archivesspace-connector/index/past-imports.phtml:22
+msgid "Past Imports"
+msgstr "Importacions anteriors"
+
+#: view/archivesspace-connector/index/past-imports.phtml:25
+msgid "Job ID"
+msgstr "ID del procés"
+
+#: view/archivesspace-connector/index/past-imports.phtml:26
+msgid "Actions"
+msgstr "Accions"
+
+#: view/archivesspace-connector/index/past-imports.phtml:27
+msgid "ArchivesSpace collection"
+msgstr "Col·lecció d'ArchivesSpace"
+
+#: view/archivesspace-connector/index/past-imports.phtml:44
+msgid "Action options"
+msgstr "Opcions d'acció"
+
+#: view/archivesspace-connector/index/past-imports.phtml:46
+#: view/archivesspace-connector/index/past-imports.phtml:47
+msgid "[No Action]"
+msgstr "[sense acció]"
+
+#: view/archivesspace-connector/index/past-imports.phtml:50
+#: view/archivesspace-connector/index/past-imports.phtml:51
+msgid "Undo"
+msgstr "Desfés"
+
+#: view/archivesspace-connector/index/past-imports.phtml:54
+#: view/archivesspace-connector/index/past-imports.phtml:55
+msgid "Re-run"
+msgstr "Reexecuta"
+
+#: view/archivesspace-connector/index/past-imports.phtml:62
+msgid "collection link"
+msgstr "enllaç a la col·lecció"
+
+#: view/archivesspace-connector/index/past-imports.phtml:111
+msgid "Reran in job "
+msgstr "Reexecutat en el procés"
+
+#: view/archivesspace-connector/index/past-imports.phtml:113
+msgid "Undone in job "
+msgstr "Desfet en el procés"
+
+#: src/Form/ImportForm.php:48
+msgid "ArchivesSpace OAI URL"
+msgstr ""
+
+#: src/Form/ImportForm.php:49
+msgid ""
+"The OAI URL endpoint of the ArchiveSpace instance to import from, with the  "
+"\"oai?\" string removed. Example: "
+"https://sandbox.archivesspace.org/staff/api/"
+msgstr ""
+
+#: src/Form/ImportForm.php:61
+msgid "ArchivesSpace target path"
+msgstr "Ruta d'ArchivesSpace"
+
+#: src/Form/ImportForm.php:62
+msgid ""
+"The path to the ArchivesSpace collection you wish to import. Example: "
+"/repositories/2/resources/138"
+msgstr ""
+"La ruta a la col·lecció d'ArchivesSpace que vols importar. Exemple: "
+"/repositories/2/resources/138"
+
+#: src/Form/ImportForm.php:82
+msgid "Maintain collection hierarchy"
+msgstr "Mantén la jerarquia de la col·lecció"
+
+#: src/Form/ImportForm.php:83
+msgid ""
+"Requires Hierarchy module. If checked, mimic ArchivesSpace collection "
+"structure by creating item sets for collection/series/subseries/etc. & "
+"organizing hierarchically with corresponding resources. If unchecked, import"
+" only Omeka item equivalent resources as chosen below."
+msgstr ""
+"Requereix el mòdul Hierarchy. Si està marcat, reprodueix l'estructura de la "
+"col·lecció d'ArchivesSpace creant conjunts de recursos per a "
+"col·lecció/sèrie/subsèrie/etc. i organitzant-los jeràrquicament amb els "
+"recursos corresponents. Si no està marcat, importa només els recursos "
+"equivalents als recursos d'Omeka, tal com s'ha triat a continuació."
+
+#: src/Form/ImportForm.php:101
+msgid "Omeka item equivalent"
+msgstr "Equivalent de recurs a l'Omeka"
+
+#: src/Form/ImportForm.php:102
+msgid ""
+"Select which type(s) of ArchivesSpace resources to import as Omeka items "
+"(marked as level=[x] in the OAI). If \"Maintain collection hierarchy\" is "
+"checked above, all other resources will import as item sets."
+msgstr ""
+
+#: src/Form/ImportForm.php:104
+msgid "ArchivesSpace Item"
+msgstr "Ítem d'ArchivesSpace"
+
+#: src/Form/ImportForm.php:105
+msgid "ArchivesSpace File"
+msgstr "Fitxer d'ArchivesSpace"
+
+#: src/Form/ImportForm.php:106
+msgid "ArchivesSpace Item & File"
+msgstr "Ítem i fitxer d'ArchivesSpace"
+
+#: src/Form/ImportForm.php:115
+msgid "Delete missing items on update"
+msgstr "Suprimeix els recursos inexistents en l'actualització"
+
+#: src/Form/ImportForm.php:116
+msgid ""
+"Delete Omeka S items not found in ArchivesSpace on a rerun/update. If "
+"unchecked, items removed from ArchivesSpace collection will remain in Omeka "
+"S."
+msgstr ""
+"Suprimeix els recursos d'Omeka S que no es trobin a ArchivesSpace en una "
+"reexecució/actualització. Si no està marcat, els recursos eliminats de la "
+"col·lecció d'ArchivesSpace es mantindran a Omeka S."
+
+#: src/Form/ImportForm.php:129
+msgid "A note about the purpose or source of this import"
+msgstr "Una nota sobre la finalitat o la font d'aquesta importació"
+
+#: src/Form/ImportForm.php:152
+msgid "Assign a resource template to all imported resources."
+msgstr "Assigna una plantilla de recurs a tots els recursos importats."
+
+#: src/Form/ImportForm.php:177
+msgid "Select site(s)"
+msgstr "Selecciona el(s) lloc(s)"
+
+#: src/Form/ImportForm.php:183
+msgid "Optional. Import new items, item sets and hierarchy into site(s)."
+msgstr ""
+"Opcional. Importa recursos nous, conjunts de recursos i la jerarquia al(s) "
+"lloc(s)."
+
+#: src/Controller/IndexController.php:43
+msgid "There was an error during validation"
+msgstr "S'ha produït un error durant la validació"
+
+#: src/Controller/IndexController.php:95
+msgid "Error: no jobs selected"
+msgstr "Error: no s'ha seleccionat cap procés"
+
+#: src/Job/Import.php:312 src/Job/Import.php:461
+msgid ": "
+msgstr ""
+
+#: src/Job/Import.php:343 src/Job/Import.php:362 src/Job/Import.php:507
+msgid "Error importing resource with URI: "
+msgstr "S'ha produït un error en importar el recurs amb l'URI:"
